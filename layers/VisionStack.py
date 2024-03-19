@@ -1,4 +1,4 @@
-import ResizeLayer, GaussianLayer, GrayscaleLayer, BinThresholdingLayer, HoughTransformLayer
+import ResizeLayer, GaussianLayer, GrayscaleLayer, BinThresholdingLayer, HoughTransformLayer, RGBMagnificationLayer
 from Layer import Layer
 from typing import List, Tuple
 from datetime import datetime
@@ -20,6 +20,9 @@ class VisionStack:
     
     def __setitem__(self, index, layer:Layer):
         self.layers[index] = layer
+
+    def insert(self, index, layer:Layer):
+        self.layers.insert(index, layer)
     
     def run(self, in_image, verbose = False):
         processed_image = in_image.copy()
@@ -43,7 +46,11 @@ if __name__ == "__main__":
                          BinThresholdingLayer.BinThresholdingLayer(SIZE, 100, 255), 
                          HoughTransformLayer.HoughTransformLayer(SIZE, 10, 1, 5, True)], SIZE)
     img = Image.open("imgs/original.jpg")
-    img.show()
+    # img.show()
+    # stack.visualize()
+    stack.insert(1, RGBMagnificationLayer.RGBMagnificationLayer(SIZE, SIZE, 'R'))
+    # print()
+    # stack.visualize()
     stack.run(np.array(img))
     processed_img = Image.fromarray(stack.processed_image)
     processed_img.show()

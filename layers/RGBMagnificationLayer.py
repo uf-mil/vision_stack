@@ -5,6 +5,7 @@ from Layer import PreprocessLayer
 
 class RGBMagnificationLayer(PreprocessLayer):
     def __init__ (self, in_dim, out_dim, channel):
+        super().__init__(size=in_dim, name="rgbMagnification")
         self.in_dim = in_dim
         self.out_dim = out_dim
         if not (channel == 'R' or channel == 'G' or channel == 'B'):
