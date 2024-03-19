@@ -4,7 +4,6 @@ import numpy as np
 class CustomLayer(AnalysisLayer):
     def __init__(self, in_size, out_size, name, process:callable, *args) -> None:
         image_size = (40, 40)
-        # Create a random image array
         random_image = np.random.randint(0, 256, size=image_size, dtype=np.uint8)
         self.args = args
         super().__init__(in_size, out_size, name)
