@@ -11,7 +11,7 @@ class CannyLayer(PreprocessLayer):
         high: This value is used to identify strong edges in the image. Any edge with a gradient value above this threshold is considered a strong edge. These strong edges are the ones that will be finally selected as edges. Setting this threshold too high may result in missing weak edges.
 
         """
-        super().__init__(size)
+        super().__init__(size, "canny")
         self.low = low
         self.high = high
 

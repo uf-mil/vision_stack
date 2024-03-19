@@ -3,7 +3,7 @@ import cv2
 
 from Layer import PreprocessLayer
 
-class RedMagnificationLayer(PreprocessLayer):
+class RGBMagnificationLayer(PreprocessLayer):
     def __init__ (self, in_dim, out_dim, channel):
         self.in_dim = in_dim
         self.out_dim = out_dim

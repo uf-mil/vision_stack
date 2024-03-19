@@ -9,7 +9,7 @@ class GaussianLayer(PreprocessLayer):
         sigma (float): Standard deviation of the Gaussian kernel
 
         """
-        super().__init__(size)
+        super().__init__(size, "gaussian")
         self.kernel_size = kernel_size
         self.sigma = sigma
     

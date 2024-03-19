@@ -1,10 +1,10 @@
 import cv2
 from Layer import PreprocessLayer
 
-class GrayscaleLayer(PreprocessLayer):
+class ResizeLayer(PreprocessLayer):
 
     def __init__(self, size, new_width, new_height) -> None:
-        super().__init__(size)
+        super().__init__(size, "resize")
         self.new_width = new_width
         self.new_height = new_height
 

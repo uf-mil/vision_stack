@@ -4,7 +4,7 @@ from Layer import PreprocessLayer
 
 class MinMaxNormalizationLayer(PreprocessLayer):
     def __init__(self, size) -> None:
-        super().__init__(size)
+        super().__init__(size, "minMaxNorm")
     
     def process(self, image):
         min_val = np.min(image)

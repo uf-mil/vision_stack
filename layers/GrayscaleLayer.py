@@ -4,7 +4,7 @@ from Layer import PreprocessLayer
 class GrayscaleLayer(PreprocessLayer):
 
     def __init__(self, size) -> None:
-        super().__init__(size)
+        super().__init__(size, "grayscale")
 
     
     def process(self, image):
