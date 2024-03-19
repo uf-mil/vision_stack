@@ -28,6 +28,9 @@ class VisionStack:
     def push(self, layer:Layer):
         self.layers.append(layer)
     
+    def pop(self, index = -1):
+        self.layers.pop(index)
+    
     def run(self, in_image, verbose = False):
         processed_image = in_image.copy()
         self.analysis_dict["updated_at"] = datetime.now()
