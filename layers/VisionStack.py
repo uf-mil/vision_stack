@@ -4,6 +4,7 @@ from typing import List, Tuple
 from datetime import datetime
 from PIL import Image
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 class VisionStack:
@@ -24,6 +25,9 @@ class VisionStack:
     def insert(self, index, layer:Layer):
         self.layers.insert(index, layer)
     
+    def push(self, layer:Layer):
+        self.layers.append(layer)
+    
     def run(self, in_image, verbose = False):
         processed_image = in_image.copy()
         self.analysis_dict["updated_at"] = datetime.now()
@@ -41,14 +45,11 @@ class VisionStack:
 if __name__ == "__main__":
     SIZE = (400,400)
     stack = VisionStack([ResizeLayer.ResizeLayer((0,0), 400, 400), 
-                         GaussianLayer.GaussianLayer(SIZE, (5,5), 15), 
-                         GrayscaleLayer.GrayscaleLayer(SIZE), 
-                         BinThresholdingLayer.BinThresholdingLayer(SIZE, 100, 255), 
-                         HoughTransformLayer.HoughTransformLayer(SIZE, 10, 1, 5, True)], SIZE)
+                         GaussianLayer.GaussianLayer(SIZE, (5,5), 15)], SIZE)
     img = Image.open("imgs/original.jpg")
     # img.show()
     # stack.visualize()
-    stack.insert(1, RGBMagnificationLayer.RGBMagnificationLayer(SIZE, SIZE, 'R'))
+    stack.push(RGBMagnificationLayer.RGBMagnificationLayer(SIZE, SIZE, 'G'))
     # print()
     # stack.visualize()
     stack.run(np.array(img))

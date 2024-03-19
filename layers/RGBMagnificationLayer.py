@@ -1,5 +1,6 @@
 import numpy as np
 import cv2
+import matplotlib.pyplot as plt
 
 from Layer import PreprocessLayer
 
@@ -49,5 +50,4 @@ class RGBMagnificationLayer(PreprocessLayer):
 
         result_image = np.clip(result_image, 0, 255)
         result_image = result_image.astype(np.uint8)
-
-        return result_image
+        return (result_image, None)
