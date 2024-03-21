@@ -75,7 +75,7 @@ if __name__ == "__main__":
     SIZE = (900,600)
     stack = VisionStack([ResizeLayer.ResizeLayer((0,0), 900, 400), 
                          GaussianLayer.GaussianLayer(SIZE, (5,5), 10)], SIZE)
-    img = Image.open("../imgs/EXAMPLE_img1.jpg")
+    img = Image.open("<Replace with path to image>")
     # img.show()
     # stack.visualize()
     def funcToMyLayer(img, args):
