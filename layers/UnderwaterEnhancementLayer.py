@@ -9,7 +9,7 @@ import datetime
 
 from Layer import PreprocessLayer
 
-WEIGHTS_PATH = "ml/weights/model_best_2842.pth.tar"
+WEIGHTS_PATH = "../ml/weights/model_best_2842.pth.tar"
 
 class UnderWaterImageEnhancementLayer(PreprocessLayer):
     def __init__(self, size) -> None:
