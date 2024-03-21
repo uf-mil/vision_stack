@@ -1,4 +1,4 @@
-import ResizeLayer, GaussianLayer, GrayscaleLayer, BinThresholdingLayer, HoughTransformLayer, RGBMagnificationLayer, UnderwaterEnhancementLayer
+import ResizeLayer, GaussianLayer, GrayscaleLayer, BinThresholdingLayer, HoughTransformLayer, RGBMagnificationLayer, UnderwaterEnhancementLayer, CustomLayer
 from Layer import Layer
 from typing import List, Tuple
 from datetime import datetime
@@ -72,18 +72,21 @@ class VisionStack:
             print(layer.name)
 
 if __name__ == "__main__":
-    SIZE = (400,400)
-    stack = VisionStack([ResizeLayer.ResizeLayer((0,0), 400, 400), 
-                         GaussianLayer.GaussianLayer(SIZE, (5,5), 15)], SIZE)
+    SIZE = (900,600)
+    stack = VisionStack([ResizeLayer.ResizeLayer((0,0), 900, 400), 
+                         GaussianLayer.GaussianLayer(SIZE, (5,5), 10)], SIZE)
     img = Image.open("imgs/original.jpg")
     # img.show()
     # stack.visualize()
-    stack.push(UnderwaterEnhancementLayer.UnderWaterImageEnhancementLayer(SIZE))
-    stack.push(UnderwaterEnhancementLayer.UnderWaterImageEnhancementLayer(SIZE))
+    def funcToMyLayer(img, args):
+        return(img, None)
+    
+    stack.push(CustomLayer.CustomLayer(SIZE, SIZE, "myLayer", funcToMyLayer, []))
     stack.push(UnderwaterEnhancementLayer.UnderWaterImageEnhancementLayer(SIZE))
     stack.push(GrayscaleLayer.GrayscaleLayer(SIZE))
     stack.push(BinThresholdingLayer.BinThresholdingLayer(SIZE, 150, 255))
     stack.push(HoughTransformLayer.HoughTransformLayer(SIZE, 100, 20, 10, True))
+    stack.push(GaussianLayer.GaussianLayer(SIZE, (5,5), 15))
     # print()
     # stack.visualize()
     stack.run(np.array(img), True)

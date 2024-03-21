@@ -13,6 +13,9 @@ class CustomLayer(AnalysisLayer):
                 output = process(random_image, args)
                 assert isinstance(output[0], np.ndarray)
                 assert len(output) == 2
-                self.process = lambda img: process(img, self.args)
+                self.in_process = lambda img: process(img, self.args)
             except Exception as e:
                 raise Exception(f"The return value of the process is invalid, must be tuple with:\ntuple[0] -> 'numpy.ndarray'\ntuple[1] -> Some value (Default to None)\nException:{e}")
+    
+    def process(self, image):
+        return self.in_process(image)
