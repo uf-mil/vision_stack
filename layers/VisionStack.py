@@ -5,6 +5,7 @@ from datetime import datetime
 from PIL import Image
 import numpy as np
 import matplotlib.pyplot as plt
+import os
 
 NUM_COLS = 3
 
@@ -75,7 +76,7 @@ if __name__ == "__main__":
     SIZE = (900,600)
     stack = VisionStack([ResizeLayer.ResizeLayer((0,0), 900, 400), 
                          GaussianLayer.GaussianLayer(SIZE, (5,5), 10)], SIZE)
-    img = Image.open("<Replace with path to image>")
+    img = Image.open(os.path.join(os.path.dirname(__file__), '../imgs/<YOUR_IMAGE_FILE>'))
     # img.show()
     # stack.visualize()
     def funcToMyLayer(img, args):
