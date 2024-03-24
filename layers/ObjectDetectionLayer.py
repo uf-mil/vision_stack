@@ -15,7 +15,14 @@ from ..ml.yolov7.utils.general import non_max_suppression
 from Layer import AnalysisLayer
 
 class ObjectDetectionLayer(AnalysisLayer):
-    def __init__(self, in_size, out_size, path_to_weights, conf, classes_array, colors_array) -> None:
+    def __init__(self, in_size, out_size, path_to_weights, conf_thres, iou_thres, class_names_array, colors_array) -> None:
+        # TODO: determine what type of processor to use based on the .type of the path_to_weights string
+
+        # TODO: set the conf and iou threshold values
+
+        # TODO: set the colors array and class_names_array values
+
+        # TODO: set the processor
         super().__init__(in_size, out_size, "objectDetection")
     
     class PTWeightsProcessor():
