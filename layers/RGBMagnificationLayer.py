@@ -6,6 +6,12 @@ from Layer import PreprocessLayer
 
 class RGBMagnificationLayer(PreprocessLayer):
     def __init__ (self, in_dim, out_dim, channel):
+        """
+        Magnifies one of the three RGB channles by first doing a min-max normalization of the channel of interest, then multiplying the normalized value with the addition of the normalized channels with the opposite inverted channel, then doing one more min-max normalization.
+
+        Parameters:
+            channel: 'R', 'G', or 'B' for the channel being magnified.
+        """
         super().__init__(size=in_dim, name="rgbMagnification")
         self.in_dim = in_dim
         self.out_dim = out_dim
