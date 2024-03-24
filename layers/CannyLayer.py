@@ -6,10 +6,12 @@ class CannyLayer(PreprocessLayer):
 
     def __init__(self, size, low, high) -> None:
         """
-        low: This value is used to identify weak edges in the image. Any edge with a gradient value below this threshold is discarded. Setting this threshold too low can result in detecting a lot of noise as edges.
+        Applies a canny edge detection layer over a grayscaled image if not already grayscaled.
+        
+        Parameters:
+            low: This value is used to identify weak edges in the image. Any edge with a gradient value below this threshold is discarded. Setting this threshold too low can result in detecting a lot of noise as edges.
 
-        high: This value is used to identify strong edges in the image. Any edge with a gradient value above this threshold is considered a strong edge. These strong edges are the ones that will be finally selected as edges. Setting this threshold too high may result in missing weak edges.
-
+            high: This value is used to identify strong edges in the image. Any edge with a gradient value above this threshold is considered a strong edge. These strong edges are the ones that will be finally selected as edges. Setting this threshold too high may result in missing weak edges.
         """
         super().__init__(size, "canny")
         self.low = low

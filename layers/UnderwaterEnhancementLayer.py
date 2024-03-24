@@ -13,6 +13,9 @@ WEIGHTS_PATH = os.path.join(os.path.dirname(__file__), '../ml/weights/model_best
 
 class UnderWaterImageEnhancementLayer(PreprocessLayer):
     def __init__(self, size) -> None:
+        """
+        Passes the image through an underwater image enhancement generation AI model.
+        """
         super().__init__(size, "underwaterImageEnhancement")
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         model = PhysicalNN()

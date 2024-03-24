@@ -11,6 +11,9 @@ NUM_COLS = 3
 
 class VisionStack:
     def __init__(self, layers:List[Layer], input_size:Tuple[int,int]):
+        """
+        An array like object that holds layers that are processed in order from index: 0 to the end of the array.
+        """
         self.layers = layers
         self.input_size = input_size,
         self.analysis_dict = {

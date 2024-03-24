@@ -4,6 +4,9 @@ from Layer import PreprocessLayer
 class GrayscaleLayer(PreprocessLayer):
 
     def __init__(self, size) -> None:
+        """
+        Converts image to grayscale.
+        """
         super().__init__(size, "grayscale")
 
     
