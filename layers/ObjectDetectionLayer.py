@@ -86,6 +86,7 @@ class ObjectDetectionLayer(AnalysisLayer):
 
             if detections:
                 detections = detections[0]
+                print(detections)
                 for x1, y1, x2, y2, conf, cls in detections:
                     class_index = int(cls.cpu().item())
                     print(f"{self.classes[class_index]} => {conf}")
@@ -101,7 +102,9 @@ class ObjectDetectionLayer(AnalysisLayer):
     
     class TFLiteWeightsProcessor():
         def __init__(self, weights_path, conf_thres, classes, colors, pass_post_processing_img = False) -> None:
-            self.weights_path = weights_path
+            self.weights_path = os.path.abspath(
+                os.path.join(os.path.dirname(__file__), weights_path),
+            )
             self.conf_thres = conf_thres
             self.classes = classes
             self.colors = colors
@@ -166,7 +169,7 @@ class ObjectDetectionLayer(AnalysisLayer):
 
             return (arr_image if self.pass_post_processing_img else img, detections[0])
         
-        def __bounding_box_coordinates(center_x, center_y, width, height):
+        def __bounding_box_coordinates(self, center_x, center_y, width, height):
                 half_width = width / 2
                 half_height = height / 2
                 x1 = center_x - half_width

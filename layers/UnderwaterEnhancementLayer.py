@@ -34,6 +34,7 @@ class UnderWaterImageEnhancementLayer(PreprocessLayer):
     def process(self, image):
         starttime = datetime.datetime.now()
         img = Image.fromarray(image)
+        img = img.convert("RGB")
         inp = self.testtransform(img).unsqueeze(0)
         inp = inp.to(self.device)
         out = self.model(inp)
