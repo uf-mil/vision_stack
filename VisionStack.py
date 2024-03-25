@@ -1,12 +1,17 @@
-import ResizeLayer, GaussianLayer, GrayscaleLayer, BinThresholdingLayer, HoughTransformLayer, RGBMagnificationLayer, UnderwaterEnhancementLayer, CustomLayer, ObjectDetectionLayer
-from Layer import Layer
+import sys
+import os
+
+print(os.getcwd())
+sys.path.append(os.getcwd() + "/layers")
+
+from layers import ResizeLayer, GaussianLayer, GrayscaleLayer, BinThresholdingLayer, HoughTransformLayer, RGBMagnificationLayer, UnderwaterEnhancementLayer, CustomLayer, ObjectDetectionLayer
+from layers.Layer import Layer
 from typing import List, Tuple
 from datetime import datetime
 from PIL import Image
 import numpy as np
 import matplotlib.pyplot as plt
 plt.switch_backend('TkAgg')
-import os
 
 NUM_COLS = 3
 
@@ -81,7 +86,7 @@ if __name__ == "__main__":
     stack = VisionStack([ResizeLayer.ResizeLayer((0,0), 960, 608), 
                         #  GaussianLayer.GaussianLayer(SIZE, (5,5), 10)
                          ], SIZE)
-    img = Image.open(os.path.join(os.path.dirname(__file__), '../imgs/sample.png'))
+    img = Image.open(os.path.join(os.path.dirname(__file__), 'imgs/sample.png'))
     CLASSES = [
         "buoy_abydos_serpenscaput",
         "buoy_abydos_taurus",
