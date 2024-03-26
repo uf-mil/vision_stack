@@ -20,11 +20,9 @@ from Layer import AnalysisLayer
 
 class ObjectDetectionLayer(AnalysisLayer):
     def __init__(self, in_size, out_size, path_to_weights, conf_thres, iou_thres, class_names_array = [], colors_array = [], pass_post_processing_img = False) -> None:
-        # TODO: determine what type of processor to use based on the .type of the path_to_weights string
         _, file_type = os.path.splitext(path_to_weights)
         self.weights_name = os.path.basename(path_to_weights)
 
-        # TODO: set the colors array and class_names_array values
         if len(colors_array) != len(class_names_array):
             raise Exception(f"ERROR -> ObjectDetectionLayer -> __init__: colors_array must be same length as class_names_array ({len(colors_array)} != {len(class_names_array)})")
 
@@ -36,7 +34,6 @@ class ObjectDetectionLayer(AnalysisLayer):
         if not self.processor:
             raise Exception("ERROR -> ObjectDetectionLayer -> __init__: Invalid file type, weights file supported are *.pt or *.tflite") 
 
-        # TODO: set the conf and iou threshold values
         self.conf_thres = conf_thres
         self.iou_thres = iou_thres
 
@@ -46,7 +43,7 @@ class ObjectDetectionLayer(AnalysisLayer):
         return self.processor.process(image)
     
     class PTWeightsProcessor():
-        def __init__(self, weights_path, conf_thres, iou_thres, classes, colors, pass_post_processing_img = False) -> None:
+        def __init__(self, weights_path, conf_thres, iou_thres, classes, colors, input_shape = ((960, 608)), pass_post_processing_img = False) -> None:
             self.weights_path = weights_path
             self.pass_post_processing_img = pass_post_processing_img
             self.device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
@@ -54,8 +51,9 @@ class ObjectDetectionLayer(AnalysisLayer):
             self.conf_thres = conf_thres
             self.iou_thres = iou_thres
 
-            self.colors = colors
             self.classes = classes
+            self.colors = colors
+            self.model_input_dims = input_shape
 
             absolute_file_path = os.path.abspath(
                 os.path.join(os.path.dirname(__file__), self.weights_path),
@@ -68,7 +66,7 @@ class ObjectDetectionLayer(AnalysisLayer):
 
         def process(self, img):
             image = Image.fromarray(img)
-            image = image.resize((960, 608))
+            image = image.resize(self.model_input_dims)
             img_transform = transforms.Compose([transforms.ToTensor()])
             img_tensor = img_transform(image).to(self.device).unsqueeze(0)
 
@@ -84,6 +82,8 @@ class ObjectDetectionLayer(AnalysisLayer):
 
             arr_image = np.array(img)
 
+            processed_detections = []
+
             if detections:
                 detections = detections[0]
                 print(detections)
@@ -97,8 +97,16 @@ class ObjectDetectionLayer(AnalysisLayer):
                         color=self.colors[class_index],
                         line_thickness=2,
                     )
+                    processed_detections.append(self.get_center_and_dims(x1, y1, x2, y2) + [conf, cls])
 
-            return (arr_image if self.pass_post_processing_img else img, detections)
+            return (arr_image if self.pass_post_processing_img else img, processed_detections)
+        
+        def get_center_and_dims(self, x1, y1, x2, y2):
+            center_x = ( x2 - x1 ) / 2
+            center_y = ( y2 - y1 ) / 2
+            w = x2 - x1
+            h = y2 - y1
+            return [center_x, center_y, w, h]
     
     class TFLiteWeightsProcessor():
         def __init__(self, weights_path, conf_thres, classes, colors, pass_post_processing_img = False) -> None:
@@ -109,25 +117,20 @@ class ObjectDetectionLayer(AnalysisLayer):
             self.classes = classes
             self.colors = colors
             self.pass_post_processing_img = pass_post_processing_img
+            self.interpreter = tf.lite.Interpreter(model_path=self.weights_path)
+            self.interpreter.allocate_tensors()
+            self.input_details = self.interpreter.get_input_details()
+            self.output_details = self.interpreter.get_output_details()
+            self.input_dims = (self.input_details[0]["shape"][-1], self.input_details[0]["shape"][-2])
 
         def process(self, img):
             COLORS = self.colors
             CLASSES = self.classes
             CONFIDENCE_THRESHOLD = self.conf_thres
 
-            # Load the TFLite model and allocate tensors
-            interpreter = tf.lite.Interpreter(model_path=self.weights_path)
-            interpreter.allocate_tensors()
-
-
-            # Get input and output tensors
-            input_details = interpreter.get_input_details()
-            output_details = interpreter.get_output_details()
-
-
             # Prepare input data (replace with your input data)
             input_data = Image.fromarray(img)
-            input_data = input_data.resize((960,608)) #TODO: Extract input size from interpreter
+            input_data = input_data.resize(self.input_dims)
             arr_image = np.array(input_data)
             img_transform = transforms.Compose([
                 transforms.ToTensor()
@@ -136,23 +139,24 @@ class ObjectDetectionLayer(AnalysisLayer):
 
 
             # Set input tensor
-            interpreter.set_tensor(input_details[0]['index'], input_data)
+            self.interpreter.set_tensor(self.input_details[0]['index'], input_data)
 
 
             # Run inference
-            interpreter.invoke()
+            self.interpreter.invoke()
 
 
             # Get output tensor
-            output_data = interpreter.get_tensor(output_details[0]['index'])
+            output_data = self.interpreter.get_tensor(self.output_details[0]['index'])
+
+            processed_detections = []
 
 
             # Process output (interpret predictions)
             # Replace this with your post-processing logic
             if len(output_data) != 0:
                 detections = output_data[0]
-                print(detections[0])
-                for x1, y1, w, h, conf, cls1, cls2, cls3, cls4, cls5, cls6 in detections: #TODO: see if you can get an array of classes instead like *args
+                for x1, y1, w, h, conf, cls1, cls2, cls3, cls4, cls5, cls6 in detections:
                     class_index = np.argmax([cls1,cls2,cls3,cls4,cls5,cls6])
                     if conf < CONFIDENCE_THRESHOLD:
                         continue
@@ -163,11 +167,12 @@ class ObjectDetectionLayer(AnalysisLayer):
 
 
                     x1, y1, x2, y2 = self.__bounding_box_coordinates(x1, y1, w, h)
+                    processed_detections.append([x1, y1, w, h, conf, class_index])
                     plot_one_box([x1, y1, x2, y2], arr_image, label=f'{CLASSES[class_index]}', color=COLORS[class_index], line_thickness=2)
             else:
                 print("No Detections Made")
 
-            return (arr_image if self.pass_post_processing_img else img, detections[0])
+            return (arr_image if self.pass_post_processing_img else img, processed_detections)
         
         def __bounding_box_coordinates(self, center_x, center_y, width, height):
                 half_width = width / 2
