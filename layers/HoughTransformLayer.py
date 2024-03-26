@@ -3,7 +3,7 @@ import numpy as np
 
 from Layer import AnalysisLayer
 
-class HoughTransformLayer(AnalysisLayer):
+class HoughTransformLayer(AnalysisLayer): #TODO: Write a more detailed description for layer
 
     def __init__(self, size, threshold, min_line_length, max_line_gap, pass_post_processing_img = False) -> None:
         """
