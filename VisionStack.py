@@ -91,7 +91,7 @@ if __name__ == "__main__":
     stack = VisionStack([ResizeLayer.ResizeLayer((0,0), 960, 608), 
                         #  GaussianLayer.GaussianLayer(SIZE, (5,5), 10)
                          ], SIZE)
-    img = Image.open(os.path.join(os.path.dirname(__file__), 'imgs/EXAMPLE_img1.jpg'))
+    img = Image.open(os.path.join(os.path.dirname(__file__), 'imgs/sample.png'))
     CLASSES = [
         "buoy_abydos_serpenscaput",
         "buoy_abydos_taurus",
