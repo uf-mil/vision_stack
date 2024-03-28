@@ -4,7 +4,7 @@ import os
 print(os.getcwd())
 sys.path.append(os.getcwd() + "/layers")
 
-from layers import ResizeLayer, GaussianLayer, GrayscaleLayer, BinThresholdingLayer, HoughTransformLayer, RGBMagnificationLayer, UnderwaterEnhancementLayer, CustomLayer, ObjectDetectionLayer
+from layers import ResizeLayer, GaussianLayer, GrayscaleLayer, BinThresholdingLayer, HoughTransformLayer, RGBMagnificationLayer, UnderwaterEnhancementLayer, CustomLayer, HistogramEquivalizationLayer
 from layers.Layer import Layer
 from typing import List, Tuple
 from datetime import datetime
@@ -60,12 +60,17 @@ class VisionStack:
                 row_index = i // NUM_COLS
                 col_index = i % NUM_COLS
 
+                if len(processed_image.shape) == 3:
+                    cmap_v = None
+                elif len(processed_image.shape) == 2:
+                    cmap_v = "gray"
+
                 if num_rows == 1:
-                    axes[col_index].imshow(processed_image)
+                    axes[col_index].imshow(processed_image, cmap=cmap_v)
                     axes[col_index].set_title(layer.name)
                 else:
-                    axes[row_index, col_index].imshow(processed_image)
-                    axes[row_index, col_index].set_title(layer.name)                
+                    axes[row_index, col_index].imshow(processed_image, cmap=cmap_v)
+                    axes[row_index, col_index].set_title(layer.name)
                 if num_rows == 1:
                     axes[col_index].axis('off')
                 else:
@@ -110,11 +115,13 @@ if __name__ == "__main__":
     
     # stack.push(CustomLayer.CustomLayer(SIZE, SIZE, "myLayer", funcToMyLayer, []))
     stack.push(UnderwaterEnhancementLayer.UnderWaterImageEnhancementLayer(SIZE))
-    # stack.push(GrayscaleLayer.GrayscaleLayer(SIZE))
-    # stack.push(BinThresholdingLayer.BinThresholdingLayer(SIZE, 150, 255))
+    stack.push(GrayscaleLayer.GrayscaleLayer(SIZE))
+    stack.push(HistogramEquivalizationLayer.HistogramAdaptiveEqualizationLayer(SIZE))
+    # stack.push(HistogramEquivalizationLayer.HistogramEqualizaionLayer(SIZE))
+    stack.push(BinThresholdingLayer.BinThresholdingLayer(SIZE, 150, 255))
     # stack.push(HoughTransformLayer.HoughTransformLayer(SIZE, 100, 20, 10, True))
     # stack.push(GaussianLayer.GaussianLayer(SIZE, (5,5), 15))
-    stack.push(ObjectDetectionLayer.ObjectDetectionLayer(SIZE,SIZE, "../ml/weights/robosub24.pt", 0.5, 0.5, CLASSES, COLORS, True))
+    # stack.push(ObjectDetectionLayer.ObjectDetectionLayer(SIZE,SIZE, "../ml/weights/robosub24.pt", 0.5, 0.5, CLASSES, COLORS, True))
     # print()
     # stack.visualize()
     stack.run(np.array(img), True)
