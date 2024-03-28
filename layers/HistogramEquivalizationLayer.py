@@ -6,6 +6,8 @@ class HistogramEqualizaionLayer(PreprocessLayer):
     def __init__(self, size) -> None:
         """
         Equalizes the pixels between pixel intesities based on the pixel histogram
+
+        Requires Grayscale images to process
         """
         super().__init__(size, "histogram-equalization")
 
@@ -17,6 +19,8 @@ class HistogramAdaptiveEqualizationLayer(PreprocessLayer):
     def __init__(self, size) -> None:
         """
         Adaptively equalizes the pixel histogram
+
+        Requires Grayscale images to process
         """
         super().__init__(size, "adaptive-histogram-equalization")
 
