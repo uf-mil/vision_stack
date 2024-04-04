@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package>
-  <name>axros</name>
+  <name>vision_stack</name>
   <version>1.0.0</version>
-  <description>The axros package</description>
+  <description>The vision pipeline package</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
   <!-- Example:  -->
