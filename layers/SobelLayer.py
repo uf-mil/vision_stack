@@ -2,7 +2,7 @@ import cv2
 
 from Layer import PreprocessLayer
 
-class CannyLayer(PreprocessLayer):
+class SobelLayer(PreprocessLayer):
 
     def __init__(self, size, ksize) -> None:
         """
