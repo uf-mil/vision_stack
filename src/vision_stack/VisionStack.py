@@ -1,11 +1,7 @@
-import sys
 import os
 
-print(os.getcwd())
-sys.path.append(os.getcwd() + "/layers")
-
-from layers import ResizeLayer, GaussianLayer, GrayscaleLayer, BinThresholdingLayer, HoughTransformLayer, RGBMagnificationLayer, UnderwaterEnhancementLayer, CustomLayer, ObjectDetectionLayer
-from layers.Layer import Layer
+from .layers import ResizeLayer, GaussianLayer, GrayscaleLayer, BinThresholdingLayer, HoughTransformLayer, RGBMagnificationLayer, UnderwaterEnhancementLayer, CustomLayer, ObjectDetectionLayer
+from .layers.Layer import Layer
 from typing import List, Tuple
 from datetime import datetime
 from PIL import Image
