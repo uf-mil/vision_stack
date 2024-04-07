@@ -1,4 +1,4 @@
-from src.VisionStack import VisionStack
+from .VisionStack import VisionStack
 
 from layers.BinThresholdingLayer import BinThresholdingLayer
 from layers.CannyLayer import CannyLayer
