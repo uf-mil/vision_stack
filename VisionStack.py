@@ -13,6 +13,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 plt.switch_backend('TkAgg')
 
+try:
+    from mil_ros_tools import Image_Publisher
+except:
+    print("mil_ros_tools package is not available")
+
 NUM_COLS = 3
 
 class VisionStack:
@@ -49,6 +54,8 @@ class VisionStack:
         num_rows = -(-len(self.layers) // NUM_COLS)
         fig, axes = plt.subplots(num_rows, NUM_COLS)
 
+        ros_is_running = False
+
         for i, layer in enumerate(self.layers):
             layer_process = layer.process(processed_image)
             processed_image = layer_process[0]
@@ -57,23 +64,29 @@ class VisionStack:
                 self.analysis_dict[layer.name] = layer_process[1]
 
             if verbose: # Create a display showing how each layer processes the image before it
-                row_index = i // NUM_COLS
-                col_index = i % NUM_COLS
+                try:
+                    verbose_layer_pub = Image_Publisher(f"~{layer.name}_{i}")
+                    verbose_layer_pub.publish(processed_image)
+                    ros_is_running = True
+                except:
+                    print("ros is not running")
+                    row_index = i // NUM_COLS
+                    col_index = i % NUM_COLS
 
-                if num_rows == 1:
-                    axes[col_index].imshow(processed_image)
-                    axes[col_index].set_title(layer.name)
-                else:
-                    axes[row_index, col_index].imshow(processed_image)
-                    axes[row_index, col_index].set_title(layer.name)                
-                if num_rows == 1:
-                    axes[col_index].axis('off')
-                else:
-                    axes[row_index, col_index].axis('off')
+                    if num_rows == 1:
+                        axes[col_index].imshow(processed_image)
+                        axes[col_index].set_title(layer.name + "_" + i)
+                    else:
+                        axes[row_index, col_index].imshow(processed_image)
+                        axes[row_index, col_index].set_title(layer.name + "_" + i)                
+                    if num_rows == 1:
+                        axes[col_index].axis('off')
+                    else:
+                        axes[row_index, col_index].axis('off')
             
         self.processed_image = processed_image
 
-        if verbose:
+        if verbose and not ros_is_running:
             plt.tight_layout()
             plt.show()
     
