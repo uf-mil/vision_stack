@@ -1,5 +1,5 @@
 import cv2
-from Layer import PreprocessLayer
+from .Layer import PreprocessLayer
 import numpy as np
 
 class BinThresholdingLayer(PreprocessLayer):

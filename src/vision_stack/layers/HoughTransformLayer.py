@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-from Layer import AnalysisLayer
+from .Layer import AnalysisLayer
 
 class HoughTransformLayer(AnalysisLayer): #TODO: Write a more detailed description for layer
 

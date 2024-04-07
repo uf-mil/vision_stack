@@ -16,7 +16,7 @@ from ml.yolov7.models.experimental import attempt_load
 from ml.yolov7.utils.plots import plot_one_box
 from ml.yolov7.utils.general import non_max_suppression
 
-from Layer import AnalysisLayer
+from .Layer import AnalysisLayer
 
 class ObjectDetectionLayer(AnalysisLayer):
     def __init__(self, in_size, out_size, path_to_weights, conf_thres, iou_thres, class_names_array = [], colors_array = [], pass_post_processing_img = False) -> None:

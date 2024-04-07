@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-from Layer import PreprocessLayer
+from .Layer import PreprocessLayer
 
 class MinMaxNormalizationLayer(PreprocessLayer):
     def __init__(self, size) -> None:

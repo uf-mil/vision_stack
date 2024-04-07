@@ -1,4 +1,4 @@
-from Layer import AnalysisLayer
+from .Layer import AnalysisLayer
 import numpy as np
 
 class CustomLayer(AnalysisLayer):

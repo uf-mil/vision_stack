@@ -7,7 +7,7 @@ import torch.nn as nn
 from torchvision import transforms
 import datetime
 
-from Layer import PreprocessLayer
+from .Layer import PreprocessLayer
 
 WEIGHTS_PATH = os.path.join(os.path.dirname(__file__), '../ml/weights/model_best_2842.pth.tar')
 

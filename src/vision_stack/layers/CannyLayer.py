@@ -1,6 +1,6 @@
 import cv2
 
-from Layer import PreprocessLayer
+from .Layer import PreprocessLayer
 
 class CannyLayer(PreprocessLayer):
 
