@@ -12,9 +12,9 @@ import torch.nn as nn
 import tensorflow as tf
 from PIL import Image
 from torchvision import transforms
-from ml.yolov7.models.experimental import attempt_load
-from ml.yolov7.utils.plots import plot_one_box
-from ml.yolov7.utils.general import non_max_suppression
+from ..ml.yolov7.models.experimental import attempt_load
+from ..ml.yolov7.utils.plots import plot_one_box
+from ..ml.yolov7.utils.general import non_max_suppression
 
 from .Layer import AnalysisLayer
 
