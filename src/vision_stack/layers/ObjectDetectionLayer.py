@@ -3,8 +3,7 @@ import cv2
 import os
 
 import sys
-sys.path.append(os.getcwd())
-sys.path.append(sys.path[-1]+"/ml/yolov7")
+sys.path.append(os.path.dirname(os.path.abspath(__file__)) +"/../ml/yolov7")
 
 import numpy as np
 import torch
@@ -12,9 +11,10 @@ import torch.nn as nn
 import tensorflow as tf
 from PIL import Image
 from torchvision import transforms
-from ml.yolov7.models.experimental import attempt_load
-from ml.yolov7.utils.plots import plot_one_box
-from ml.yolov7.utils.general import non_max_suppression
+print(sys.path[-1])
+from ..ml.yolov7.models.experimental import attempt_load
+from ..ml.yolov7.utils.plots import plot_one_box
+from ..ml.yolov7.utils.general import non_max_suppression
 
 from .Layer import AnalysisLayer
 
