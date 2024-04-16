@@ -3,7 +3,7 @@ from .Layer import PreprocessLayer
 
 class ResizeLayer(PreprocessLayer):
 
-    def __init__(self, size, new_width, new_height) -> None:
+    def __init__(self, new_width, new_height) -> None:
         """
         Resizes the image to be of new dimensions.
 
@@ -11,7 +11,7 @@ class ResizeLayer(PreprocessLayer):
             new_width: Image width will be resized to the new pixel width value.
             new_height: Image height will be resized to the new pixel height value.
         """
-        super().__init__(size, "resize")
+        super().__init__("resize")
         self.new_width = new_width
         self.new_height = new_height
 

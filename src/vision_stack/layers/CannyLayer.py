@@ -4,7 +4,7 @@ from .Layer import PreprocessLayer
 
 class CannyLayer(PreprocessLayer):
 
-    def __init__(self, size, low, high) -> None:
+    def __init__(self, low, high) -> None:
         """
         Applies a canny edge detection layer over a grayscaled image if not already grayscaled.
         
@@ -13,7 +13,7 @@ class CannyLayer(PreprocessLayer):
 
             high: This value is used to identify strong edges in the image. Any edge with a gradient value above this threshold is considered a strong edge. These strong edges are the ones that will be finally selected as edges. Setting this threshold too high may result in missing weak edges.
         """
-        super().__init__(size, "canny")
+        super().__init__("canny")
         self.low = low
         self.high = high
 

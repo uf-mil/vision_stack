@@ -19,7 +19,7 @@ from ..ml.yolov7.utils.general import non_max_suppression
 from .Layer import AnalysisLayer
 
 class ObjectDetectionLayer(AnalysisLayer):
-    def __init__(self, in_size, out_size, path_to_weights, conf_thres, iou_thres, class_names_array = [], colors_array = [], pass_post_processing_img = False) -> None:
+    def __init__(self, path_to_weights, conf_thres, iou_thres, class_names_array = [], colors_array = [], pass_post_processing_img = False) -> None:
         _, file_type = os.path.splitext(path_to_weights)
         self.weights_name = os.path.basename(path_to_weights)
 
@@ -37,7 +37,7 @@ class ObjectDetectionLayer(AnalysisLayer):
         self.conf_thres = conf_thres
         self.iou_thres = iou_thres
 
-        super().__init__(in_size, out_size, f"objectDetection-{self.weights_name}")
+        super().__init__(f"objectDetection-{self.weights_name}")
     
     def process(self, image):
         return self.processor.process(image)

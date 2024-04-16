@@ -5,7 +5,7 @@ from .Layer import AnalysisLayer
 
 class HoughTransformLayer(AnalysisLayer): #TODO: Write a more detailed description for layer
 
-    def __init__(self, size, threshold, min_line_length, max_line_gap, pass_post_processing_img = False) -> None:
+    def __init__(self, threshold, min_line_length, max_line_gap, pass_post_processing_img = False) -> None:
         """
         Apply Hough Transform for line detection on the given image.
 
@@ -15,7 +15,7 @@ class HoughTransformLayer(AnalysisLayer): #TODO: Write a more detailed descripti
         Returns:
             lines: A list of lines detected in the image, each line represented by rho and theta values.
         """
-        super().__init__(in_size=size, out_size=size, name="houghTransform")
+        super().__init__(name="houghTransform")
         self.threshold = threshold
         self.pass_post_processing_img = pass_post_processing_img
         self.min_line_length = min_line_length

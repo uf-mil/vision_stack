@@ -4,14 +4,14 @@ from .Layer import PreprocessLayer
 
 class SobelLayer(PreprocessLayer):
 
-    def __init__(self, size, ksize) -> None:
+    def __init__(self, ksize) -> None:
         """
         Passes a cv2.Sobel filter over the image.
 
         Parameters:
             ksize: parameter to change the size of the Sobel kernel. A larger kernel size can capture larger gradients but may also result in more noise.
         """
-        super().__init__(size, "sobel")
+        super().__init__("sobel")
         self.ksize = ksize
 
     def process(self, image):

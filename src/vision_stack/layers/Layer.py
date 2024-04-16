@@ -21,16 +21,8 @@ class Layer(ABC):
         pass
 
 class PreprocessLayer(Layer):
-    def __init__(self, size, name) -> None:
-        self.out_dim = size
-        self.in_dim = size
+    def __init__(self, name) -> None:
         self._name = name
-    
-    def input_size(self):
-        return self.in_dim
-    
-    def output_size(self):
-        return self.out_dim
     
     @property
     def name(self):
@@ -41,16 +33,8 @@ class PreprocessLayer(Layer):
         self._name = value
     
 class AnalysisLayer(Layer):
-    def __init__(self, in_size, out_size, name) -> None:
-        self.out_dim = out_size
-        self.in_dim = in_size
+    def __init__(self, name) -> None:
         self.name = name
-    
-    def input_size(self):
-        return self.in_dim
-    
-    def output_size(self):
-        return self.out_dim
     
     @property
     def name(self):
