@@ -1,11 +1,6 @@
-import os
-
-from .layers import ResizeLayer, GaussianLayer, GrayscaleLayer, BinThresholdingLayer, HoughTransformLayer, RGBMagnificationLayer, UnderwaterEnhancementLayer, CustomLayer, ObjectDetectionLayer
 from .layers.Layer import Layer
-from typing import List, Tuple
+from typing import List
 from datetime import datetime
-from PIL import Image
-import numpy as np
 import matplotlib.pyplot as plt
 plt.switch_backend('TkAgg')
 
@@ -17,12 +12,11 @@ except:
 NUM_COLS = 3
 
 class VisionStack:
-    def __init__(self, layers:List[Layer], input_size:Tuple[int,int]):
+    def __init__(self, layers:List[Layer]):
         """
         An array like object that holds layers that are processed in order from index: 0 to the end of the array.
         """
         self.layers = layers
-        self.input_size = input_size,
         self.analysis_dict = {
             "updated_at": datetime.now()
         }
@@ -89,41 +83,3 @@ class VisionStack:
     def visualize(self):
         for layer in self.layers:
             print(layer.name)
-
-if __name__ == "__main__":
-    SIZE = (960,608)
-    stack = VisionStack([ResizeLayer.ResizeLayer((0,0), 960, 608), 
-                        #  GaussianLayer.GaussianLayer(SIZE, (5,5), 10)
-                         ], SIZE)
-    img = Image.open(os.path.join(os.path.dirname(__file__), 'imgs/sample.png'))
-    CLASSES = [
-        "buoy_abydos_serpenscaput",
-        "buoy_abydos_taurus",
-        "buoy_earth_auriga",
-        "buoy_earth_cetus",
-        "gate_abydos",
-        "gate_earth",
-    ]
-    COLORS = [
-        (255, 0, 0),
-        (0, 255, 0),
-        (0, 0, 255),
-        (255, 155, 0),
-        (255, 0, 255),
-        (0, 255, 255),
-    ]
-    # img.show()
-    # stack.visualize()
-    def funcToMyLayer(img, args):
-        return(img, None)
-    
-    # stack.push(CustomLayer.CustomLayer(SIZE, SIZE, "myLayer", funcToMyLayer, []))
-    stack.push(UnderwaterEnhancementLayer.UnderWaterImageEnhancementLayer(SIZE))
-    stack.push(GrayscaleLayer.GrayscaleLayer(SIZE))
-    stack.push(BinThresholdingLayer.BinThresholdingLayer(SIZE, 150, 255))
-    stack.push(HoughTransformLayer.HoughTransformLayer(SIZE, 100, 20, 10, True))
-    stack.push(GaussianLayer.GaussianLayer(SIZE, (5,5), 15))
-    # stack.push(ObjectDetectionLayer.ObjectDetectionLayer(SIZE,SIZE, "../ml/weights/robosub24.pt", 0.5, 0.5, CLASSES, COLORS, True))
-    # print()
-    # stack.visualize()
-    stack.run(np.array(img), True)
