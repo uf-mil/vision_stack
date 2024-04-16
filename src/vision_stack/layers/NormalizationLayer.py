@@ -3,11 +3,11 @@ import numpy as np
 from .Layer import PreprocessLayer
 
 class MinMaxNormalizationLayer(PreprocessLayer):
-    def __init__(self, size) -> None:
+    def __init__(self) -> None:
         """
         Normalizes an image through by getting the minimum pixel value, the maximum pixel value, subtracting the minimum value from all pixels, and dividing by the difference between the maximum pixel value and the minimum pixel value.
         """
-        super().__init__(size, "minMaxNorm")
+        super().__init__("minMaxNorm")
     
     def process(self, image):
         min_val = np.min(image)
@@ -17,11 +17,11 @@ class MinMaxNormalizationLayer(PreprocessLayer):
     
 
 class ZScoreNormalizationLayer(PreprocessLayer):
-    def __init__(self, size) -> None:
+    def __init__(self) -> None:
         """
         Normalizes the image by calculating the mean and standard deviation of the pixels in the image, then subtracting the mean from all pixel values and dividing by the standard deviation.
         """
-        super().__init__(size)
+        super().__init__()
     
     def process(self, image):
         mean = np.mean(image)
@@ -30,11 +30,11 @@ class ZScoreNormalizationLayer(PreprocessLayer):
         return (normalized_image, None)
 
 class RobustScalingLayer(PreprocessLayer):
-    def __init__(self, size) -> None:
+    def __init__(self) -> None:
         """
         Normalizes the image by calculating the median and the IQR of all the pixels, then subtracting the median form the pixels and dividing by the IQR.
         """
-        super().__init__(size)
+        super().__init__()
     
     def process(self, image):
         median = np.median(image)

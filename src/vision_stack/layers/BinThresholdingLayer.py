@@ -4,7 +4,7 @@ import numpy as np
 
 class BinThresholdingLayer(PreprocessLayer):
 
-    def __init__(self, size, low, high) -> None:
+    def __init__(self, low, high) -> None:
         """
         Binarize an image by first converting it to grayscale (if not already grayscaled), and assigning a 255 value to any pixels that exist between the low and high (inclusive) paramters.
 
@@ -14,7 +14,7 @@ class BinThresholdingLayer(PreprocessLayer):
         """
         if low < 0 or high > 255 or low > high:
             raise Exception(f"Threshold values are invalid:\nLow: {low}  High: {high}\nRequirements:\n- Low < High\n- Low > 0\n- High < 255")
-        super().__init__(size, "binThresholdingLayer")
+        super().__init__("binThresholdingLayer")
         self.low = low
         self.high = high
 

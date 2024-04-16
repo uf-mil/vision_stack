@@ -12,11 +12,11 @@ from .Layer import PreprocessLayer
 WEIGHTS_PATH = os.path.join(os.path.dirname(__file__), '../ml/weights/model_best_2842.pth.tar')
 
 class UnderWaterImageEnhancementLayer(PreprocessLayer):
-    def __init__(self, size) -> None:
+    def __init__(self) -> None:
         """
         Passes the image through an underwater image enhancement generation AI model.
         """
-        super().__init__(size, "underwaterImageEnhancement")
+        super().__init__("underwaterImageEnhancement")
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         model = PhysicalNN()
         self.model = torch.nn.DataParallel(model).to(self.device)

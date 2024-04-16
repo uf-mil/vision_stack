@@ -2,7 +2,7 @@ from .Layer import AnalysisLayer
 import numpy as np
 
 class CustomLayer(AnalysisLayer):
-    def __init__(self, in_size, out_size, name, process:callable, *args) -> None:
+    def __init__(self, name, process:callable, *args) -> None:
         """
         Allows you to perform any custom image manipulation.
         
@@ -16,7 +16,7 @@ class CustomLayer(AnalysisLayer):
         image_size = (40, 40)
         random_image = np.random.randint(0, 256, size=image_size, dtype=np.uint8)
         self.args = args
-        super().__init__(in_size, out_size, name)
+        super().__init__(name)
 
         if callable(process):
             try:
