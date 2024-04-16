@@ -4,14 +4,6 @@ from abc import ABC, abstractmethod
 class Layer(ABC):
 
     @abstractmethod
-    def input_size(self):
-        pass
-
-    @abstractmethod
-    def output_size(self):
-        pass
-
-    @abstractmethod
     def process(self, image):
         pass
 
