@@ -5,7 +5,7 @@ Author: Daniel Parra
 
 ## Installation
 
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install foobar.
+Use the git submodule manager to add vision stack to your repository.
 
 ```bash
 git submodule add https://github.com/uf-mil/vision_stack.git path/to/submodule
