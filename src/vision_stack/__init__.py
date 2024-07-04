@@ -1,5 +1,6 @@
 from .VisionStack import VisionStack
 
+from .layers.GrayscaleLayer import GrayscaleLayer
 from .layers.BinThresholdingLayer import BinThresholdingLayer
 from .layers.CannyLayer import CannyLayer
 from .layers.CustomLayer import CustomLayer
