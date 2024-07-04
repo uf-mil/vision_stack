@@ -66,7 +66,6 @@ class ObjectDetectionLayer(AnalysisLayer):
 
         def process(self, img):
             image = Image.fromarray(img)
-            image = image.resize(self.model_input_dims)
             img_transform = transforms.Compose([transforms.ToTensor()])
             img_tensor = img_transform(image).to(self.device).unsqueeze(0)
 
@@ -80,7 +79,7 @@ class ObjectDetectionLayer(AnalysisLayer):
                 iou_thres=self.iou_thres,
             )
 
-            arr_image = np.array(img)
+            processed_image = img.copy()
 
             processed_detections = []
 
@@ -92,14 +91,14 @@ class ObjectDetectionLayer(AnalysisLayer):
                     print(f"{self.classes[class_index]} => {conf}")
                     plot_one_box(
                         [x1, y1, x2, y2],
-                        arr_image,
+                        processed_image,
                         label=f"{self.classes[class_index]}",
                         color=self.colors[class_index],
                         line_thickness=2,
                     )
                     processed_detections.append(self.get_center_and_dims(x1, y1, x2, y2) + [conf, cls])
 
-            return (arr_image if self.pass_post_processing_img else img, processed_detections)
+            return (processed_image if self.pass_post_processing_img else img, processed_detections)
         
         def get_center_and_dims(self, x1, y1, x2, y2):
             center_x = ( x2 - x1 ) / 2
@@ -130,8 +129,7 @@ class ObjectDetectionLayer(AnalysisLayer):
 
             # Prepare input data (replace with your input data)
             input_data = Image.fromarray(img)
-            input_data = input_data.resize(self.input_dims)
-            arr_image = np.array(input_data)
+            processed_image = img.copy()
             img_transform = transforms.Compose([
                 transforms.ToTensor()
             ])
@@ -168,11 +166,11 @@ class ObjectDetectionLayer(AnalysisLayer):
 
                     x1, y1, x2, y2 = self.__bounding_box_coordinates(x1, y1, w, h)
                     processed_detections.append([x1, y1, w, h, conf, class_index])
-                    plot_one_box([x1, y1, x2, y2], arr_image, label=f'{CLASSES[class_index]}', color=COLORS[class_index], line_thickness=2)
+                    plot_one_box([x1, y1, x2, y2], processed_image, label=f'{CLASSES[class_index]}', color=COLORS[class_index], line_thickness=2)
             else:
                 print("No Detections Made")
 
-            return (arr_image if self.pass_post_processing_img else img, processed_detections)
+            return (processed_image if self.pass_post_processing_img else img, processed_detections)
         
         def __bounding_box_coordinates(self, center_x, center_y, width, height):
                 half_width = width / 2
