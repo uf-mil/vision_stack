@@ -26,7 +26,7 @@ from .Layer import AnalysisLayer
 class ObjectDetectionLayer(AnalysisLayer):
     def __init__(self, path_to_weights, conf_thres, iou_thres, class_names_array = [], colors_array = [], pass_post_processing_img = False) -> None:
         _, file_type = os.path.splitext(path_to_weights)
-        self.weights_name = os.path.basename(path_to_weights)
+        self.weights_name = os.path.splitext(os.path.basename(path_to_weights))[0]
 
         if len(colors_array) != len(class_names_array):
             raise Exception(f"ERROR -> ObjectDetectionLayer -> __init__: colors_array must be same length as class_names_array ({len(colors_array)} != {len(class_names_array)})")
