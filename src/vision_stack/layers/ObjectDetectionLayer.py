@@ -8,7 +8,12 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)) +"/../ml/yolov7")
 import numpy as np
 import torch
 import torch.nn as nn
-import tensorflow as tf
+
+try:
+    import tensorflow as tf
+except Exception as e:
+    print("Tensorflow could not be imported...")
+
 from PIL import Image
 from torchvision import transforms
 print(sys.path[-1])
