@@ -42,7 +42,7 @@ class ObjectDetectionLayer(AnalysisLayer):
         self.conf_thres = conf_thres
         self.iou_thres = iou_thres
 
-        super().__init__(f"objectDetection-{self.weights_name}")
+        super().__init__(f"objectDetection_{self.weights_name}")
     
     def process(self, image):
         return self.processor.process(image)
