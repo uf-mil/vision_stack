@@ -2,11 +2,11 @@ from .layers.Layer import Layer
 from typing import List
 from datetime import datetime
 import matplotlib.pyplot as plt
-plt.switch_backend('TkAgg')
 
 try:
     from mil_ros_tools import Image_Publisher
 except:
+    plt.switch_backend('TkAgg')
     print("mil_ros_tools package is not available")
 
 NUM_COLS = 3
