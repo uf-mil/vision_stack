@@ -10,6 +10,6 @@ from .layers.NormalizationLayer import MinMaxNormalizationLayer, ZScoreNormaliza
 from .layers.ObjectDetectionLayer import ObjectDetectionLayer
 from .layers.ResizeLayer import ResizeLayer
 from .layers.RGBMagnificationLayer import RGBMagnificationLayer
-from .layers.ColorMagnification import ColorMagnificationLayer
+from .layers.ColorMagnificationLayer import ColorMagnificationLayer
 from .layers.SobelLayer import SobelLayer
 from .layers.UnderwaterEnhancementLayer import UnderWaterImageEnhancementLayer
