@@ -13,7 +13,7 @@ class ColorMagnificationLayer(PreprocessLayer):
         """
         super().__init__(name="colorMagnification")
         
-        if not (len(color_tuple) != 3):
+        if (len(color_tuple) != 3):
             raise Exception(f"Invalid color_tuple received [{color_tuple}], expected a color_tuple that is of size 3") # Allowing 3-tuple with values outside of 0-255 for experimental use
         else:
             self.color = color_tuple
