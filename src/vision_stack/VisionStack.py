@@ -51,7 +51,7 @@ class VisionStack:
             processed_image = layer_process[0]
 
             if layer_process[1] is not None:
-                self.analysis_dict[layer.name] = layer_process[1]
+                self.analysis_dict[f"{layer.name}_{i}"] = layer_process[1]
 
             if verbose: # Create a display showing how each layer processes the image before it
                 try:
