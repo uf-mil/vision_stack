@@ -56,4 +56,4 @@ class HoughTransformLayer(AnalysisLayer): #TODO: Write a more detailed descripti
                     2,
                 )
 
-        return (contour_image_bgr if self.pass_post_processing_img else image, lines)
+        return (contour_image_bgr if self.pass_post_processing_img else image, [] if lines is None else lines)
