@@ -7,7 +7,7 @@ class RGBtoBGRLayer(PreprocessLayer):
         """
         Converts image to grayscale.
         """
-        super().__init__("grayscale")
+        super().__init__("rgb_to_bgr")
 
     
     def process(self, image):
