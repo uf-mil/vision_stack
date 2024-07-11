@@ -11,5 +11,6 @@ from .layers.ObjectDetectionLayer import ObjectDetectionLayer
 from .layers.ResizeLayer import ResizeLayer
 from .layers.RGBMagnificationLayer import RGBMagnificationLayer
 from .layers.ColorMagnificationLayer import ColorMagnificationLayer
+from .layers.RGBtoBGRLayer import RGBtoBGRLayer
 from .layers.SobelLayer import SobelLayer
 from .layers.UnderwaterEnhancementLayer import UnderWaterImageEnhancementLayer
