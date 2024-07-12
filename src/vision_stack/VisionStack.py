@@ -12,7 +12,8 @@ except:
 NUM_COLS = 3
 
 class VisionStack:
-    def __init__(self, layers:List[Layer]):
+    static_id = 0
+    def __init__(self, layers:List[Layer], unique_name = ""):
         """
         An array like object that holds layers that are processed in order from index: 0 to the end of the array.
         """
@@ -21,6 +22,9 @@ class VisionStack:
             "updated_at": datetime.now()
         }
         self.processed_image = None
+        VisionStack.static_id += 1
+        self.instance_id = VisionStack.static_id
+        self.unique_name = unique_name
     
     def __getitem__(self, index):
         return self.layers[index]
@@ -55,7 +59,7 @@ class VisionStack:
 
             if verbose: # Create a display showing how each layer processes the image before it
                 try:
-                    verbose_layer_pub = Image_Publisher(f"~{layer.name}_{i}")
+                    verbose_layer_pub = Image_Publisher(f"~{self.instance_id if self.unique_name == "" else self.unique_name}/{layer.name}_{i}")
                     verbose_layer_pub.publish(processed_image)
                     ros_is_running = True
                 except:
