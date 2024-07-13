@@ -4,6 +4,7 @@ from datetime import datetime
 import matplotlib.pyplot as plt
 
 try:
+    import rospy
     from mil_ros_tools import Image_Publisher
 except:
     plt.switch_backend('TkAgg')
@@ -53,19 +54,22 @@ class VisionStack:
         for i, layer in enumerate(self.layers):
             layer_process = layer.process(processed_image)
             processed_image = layer_process[0]
+            topic_name = f"~{self.instance_id if self.unique_name == '' else self.unique_name}/{layer.name}_{i}"
 
             if layer_process[1] is not None:
                 self.analysis_dict[f"{layer.name}_{i}"] = layer_process[1]
 
                 # Try publishing message from layer
-                try:
-                    pass
-                except Exception as e:
-                    pass
+                if layer.msg:
+                    try:
+                        analysis_pub = rospy.Publisher(topic_name+"/analysis", type(layer.msg), queue_size=10)
+                        analysis_pub.publish(layer.msg)
+                    except Exception as e:
+                        print(f"Could not publish ros message:\n{e}")
 
             if verbose: # Create a display showing how each layer processes the image before it
                 try:
-                    verbose_layer_pub = Image_Publisher(f"~{self.instance_id if self.unique_name == "" else self.unique_name}/{layer.name}_{i}")
+                    verbose_layer_pub = Image_Publisher(topic_name)
                     verbose_layer_pub.publish(processed_image)
                     ros_is_running = True
                 except:
