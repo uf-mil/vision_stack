@@ -120,7 +120,7 @@ class ObjectDetectionLayer(AnalysisLayer):
                         color=self.colors[class_index],
                         line_thickness=2,
                     )
-                    processed_detections.append(self.get_center_and_dims(x1, y1, x2, y2) + [conf, cls])
+                    processed_detections.append(self.get_center_and_dims(x1, y1, x2, y2) + [conf, class_index])
 
             return (img if self.pass_post_processing_img else unprocessed_image, processed_detections)
         
