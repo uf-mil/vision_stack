@@ -57,6 +57,12 @@ class VisionStack:
             if layer_process[1] is not None:
                 self.analysis_dict[f"{layer.name}_{i}"] = layer_process[1]
 
+                # Try publishing message from layer
+                try:
+                    pass
+                except Exception as e:
+                    pass
+
             if verbose: # Create a display showing how each layer processes the image before it
                 try:
                     verbose_layer_pub = Image_Publisher(f"~{self.instance_id if self.unique_name == "" else self.unique_name}/{layer.name}_{i}")

@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import cv2
 
 import os
@@ -8,6 +10,12 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)) +"/../ml/yolov7")
 import numpy as np
 import torch
 import torch.nn as nn
+
+try:
+    import rospy
+    from vision_stack.msg import ObjectDetection, ObjectDetections
+except Exception as e:
+    print(f"Could not import rospy or messages because:\n{e}")
 
 try:
     import tensorflow as tf
@@ -25,27 +33,38 @@ from .Layer import AnalysisLayer
 
 class ObjectDetectionLayer(AnalysisLayer):
     def __init__(self, path_to_weights, conf_thres, iou_thres, class_names_array = [], colors_array = [], pass_post_processing_img = False) -> None:
+
+        # Find file for weights and extract name
         _, file_type = os.path.splitext(path_to_weights)
         self.weights_name = os.path.splitext(os.path.basename(path_to_weights))[0]
 
+        # Check if the number of colors provided matches the number of classes
         if len(colors_array) != len(class_names_array):
             raise Exception(f"ERROR -> ObjectDetectionLayer -> __init__: colors_array must be same length as class_names_array ({len(colors_array)} != {len(class_names_array)})")
 
         self.class_names_array = class_names_array
         self.colors_array = colors_array
 
+        # Choose a processor based on the provided weight's file type
         self.processor = self.PTWeightsProcessor(path_to_weights, conf_thres, iou_thres, class_names_array, colors_array, pass_post_processing_img) if file_type == ".pt" else self.TFLiteWeightsProcessor(path_to_weights, conf_thres, class_names_array, colors_array, pass_post_processing_img) if file_type == ".tflite" else None
 
         if not self.processor:
             raise Exception("ERROR -> ObjectDetectionLayer -> __init__: Invalid file type, weights file supported are *.pt or *.tflite") 
 
+        # Store parameters
         self.conf_thres = conf_thres
         self.iou_thres = iou_thres
+        self.msg = None
 
         super().__init__(f"objectDetection_{self.weights_name}")
     
     def process(self, image):
-        return self.processor.process(image)
+        img, detections = self.processor.process(image)
+        object_detections = []
+        for detection in detections:
+            object_detections.append(ObjectDetection(center_x=detection[0], center_y=detection[1], width=detection[2], height=detection[3], confidence=detection[4], class_index=detection[5], class_name=self.class_names_array[detection[5]]))
+        self.msg = ObjectDetections(detections=object_detections)
+        return (img,detections)
     
     class PTWeightsProcessor():
         def __init__(self, weights_path, conf_thres, iou_thres, classes, colors, input_shape = ((960, 608)), pass_post_processing_img = False) -> None:
