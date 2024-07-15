@@ -16,7 +16,7 @@ git submodule add https://github.com/uf-mil/vision_stack.git path/to/submodule
 ```python
 from PIL import Image
 import numpy as np
-from vision_stack import VisionStack, BinThresholdingLayer, CannyLayer, ColorMagnification, CustomLayer, GaussianLayer, GrayscaleLayer, HoughTransformLayer, MinMaxNormalizationLayer, ZScoreNormalizationLayer, RobustScalingLayer, ObjectDetectionLayer, ResizeLayer, RGBMagnificationLayer, SobelLayer, UnderwaterImageEnhancementLayer
+from vision_stack import VisionStack, BinThresholdingLayer, CannyLayer, ColorMagnificationLayer, CustomLayer, GaussianLayer, GrayscaleLayer, HoughTransformLayer, MinMaxNormalizationLayer, ZScoreNormalizationLayer, RobustScalingLayer, ObjectDetectionLayer, ResizeLayer, RGBMagnificationLayer, SobelLayer, UnderWaterImageEnhancementLayer
 
 # Initialize vision stack data structure
 def myCustomImageProcessing(img, *args):
