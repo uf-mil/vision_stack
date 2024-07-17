@@ -95,7 +95,8 @@ class ObjectDetectionLayer(AnalysisLayer):
 
             print(img_tensor.size())
 
-            pred_results = self.__MODEL(img_tensor)[0]
+            with torch.inference_mode():
+                pred_results = self.__MODEL(img_tensor)[0]
 
             detections = non_max_suppression(
                 pred_results,
@@ -122,11 +123,11 @@ class ObjectDetectionLayer(AnalysisLayer):
                     )
                     processed_detections.append(self.get_center_and_dims(x1, y1, x2, y2) + [conf, class_index])
 
-            return (img if self.pass_post_processing_img else unprocessed_image, processed_detections)
+            return (img if self.pass_post_processing_img else img, processed_detections)
         
         def get_center_and_dims(self, x1, y1, x2, y2):
-            center_x = ( x2 - x1 ) / 2
-            center_y = ( y2 - y1 ) / 2
+            center_x = ( x2 - x1 ) / 2 + x1
+            center_y = ( y2 - y1 ) / 2 + y1
             w = x2 - x1
             h = y2 - y1
             return [center_x, center_y, w, h]

@@ -1,12 +1,12 @@
 from .layers.Layer import Layer
 from typing import List
 from datetime import datetime
-import matplotlib.pyplot as plt
 
 try:
     import rospy
     from mil_ros_tools import Image_Publisher
 except:
+    import matplotlib.pyplot as plt
     plt.switch_backend('TkAgg')
     print("mil_ros_tools package is not available")
 
@@ -47,7 +47,6 @@ class VisionStack:
         self.analysis_dict["updated_at"] = datetime.now()
 
         num_rows = -(-len(self.layers) // NUM_COLS)
-        fig, axes = plt.subplots(num_rows, NUM_COLS)
 
         ros_is_running = False
 
@@ -74,6 +73,7 @@ class VisionStack:
                     ros_is_running = True
                 except:
                     print("ros is not running")
+                    fig, axes = plt.subplots(num_rows, NUM_COLS)
                     row_index = i // NUM_COLS
                     col_index = i % NUM_COLS
 
