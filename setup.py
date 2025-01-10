@@ -1,13 +1,28 @@
-# ! DO NOT MANUALLY INVOKE THIS setup.py, USE CATKIN INSTEAD
+from setuptools import find_packages, setup
+import os
+from glob import glob
 
-from catkin_pkg.python_setup import generate_distutils_setup
-from setuptools import setup
+package_name = 'vision_stack'
 
-# fetch values from package.xml
-setup_args = generate_distutils_setup(
-    packages=["vision_stack"],
-    package_dir={"": "src"},
-    requires=[],  # TODO
+setup(
+    name=package_name,
+    version='0.0.0',
+    packages=find_packages(exclude=['test']),
+    data_files=[
+        ('share/ament_index/resource_index/packages',
+            ['resource/' + package_name]),
+        ('share/' + package_name, ['package.xml']),
+        (os.path.join('share', package_name, 'msg'), glob('msg/*.msg')),
+    ],
+    install_requires=['setuptools'],
+    zip_safe=True,
+    maintainer='Daniel Parra',
+    maintainer_email='daniel27parra@gmail.com',
+    description='Package that offers image processing tools for preprocessing, analysis, and machine learning capabilities.',
+    license='TODO: License declaration',
+    tests_require=['pytest'],
+    entry_points={
+        'console_scripts': [
+        ],
+    },
 )
-
-setup(**setup_args)
