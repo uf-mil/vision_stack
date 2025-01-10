@@ -6,10 +6,8 @@ import os
 
 import numpy as np
 import torch
-import torch.nn as nn
 
 try:
-    import rclpy
     from vision_stack.msg import ObjectDetection, ObjectDetections
 except Exception as e:
     print(f"Could not import rclpy or messages because:\n{e}")

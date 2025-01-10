@@ -5,10 +5,9 @@ import math
 from .Layer import AnalysisLayer
 
 try:
-    import rospy
     from vision_stack.msg import Lines, HoughTransform
 except Exception as e:
-    print(f"Could not import rospy or messages because:\n{e}")
+    print(f"Could not import messages because:\n{e}")
 
 class HoughTransformLayer(AnalysisLayer): #TODO: Write a more detailed description for layer
 
