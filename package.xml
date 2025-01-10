@@ -8,6 +8,18 @@
   <license>TODO: License declaration</license>
 
   <depend>rclpy</depend>
+  <depend>sensor_msgs</depend>
+  
+  <depend>typing</depend>
+  <depend>datetime</depend>
+  <depend>numpy</depend>
+  <depend>cv_bridge</depend>
+  <depend>cv2</depend>
+  <depend>math</depend>
+  <depend>abc</depend>
+  <depend>PIL</depend>
+  <depend>torch</depend>
+  <depend>torchvision</depend>
 
   <test_depend>ament_copyright</test_depend>
   <test_depend>python3-pytest</test_depend>

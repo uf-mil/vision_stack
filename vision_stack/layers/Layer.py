@@ -1,4 +1,3 @@
-from PIL import Image
 from abc import ABC, abstractmethod
 
 class Layer(ABC):

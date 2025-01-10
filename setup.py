@@ -7,7 +7,7 @@ package_name = 'vision_stack'
 setup(
     name=package_name,
     version='0.0.0',
-    packages=find_packages(exclude=['test']),
+    packages=find_packages(exclude=['test'], include=[package_name, f'{package_name}.*']),
     data_files=[
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
@@ -23,6 +23,15 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
+            'vision_stack = vision_stack.VisionStack:main'
+        ],
+    },
+    include_package_data=True,  # Ensure non-Python files are included
+    package_data={
+        'vision_stack': [
+            'layers/helpers/*',
+            'layers/*.py',
+            'ml/weights/*',
         ],
     },
 )
