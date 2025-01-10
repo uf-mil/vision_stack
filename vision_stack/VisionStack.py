@@ -7,7 +7,6 @@ from cv_bridge import CvBridge, CvBridgeError
 from sensor_msgs.msg import Image
 
 try:
-    import rclpy
     from rclpy.publisher import Publisher
     from rclpy.node import Node
 except:
@@ -58,7 +57,7 @@ class VisionStack(Node):
         """
         An array like object that holds layers that are processed in order from index: 0 to the end of the array.
         """
-        super.__init__(f"vs_{unique_name}")
+        super().__init__(f"vs_{unique_name}")
         self.layers = layers
         self.analysis_dict = {
             "updated_at": datetime.now()
