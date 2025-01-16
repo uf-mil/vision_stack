@@ -1,6 +1,6 @@
 from .layers.Layer import Layer
 from typing import List
-from datetime import datetime
+import time
 import numpy as np
 
 from cv_bridge import CvBridge, CvBridgeError
@@ -60,7 +60,7 @@ class VisionStack(Node):
         super().__init__(f"vs_{unique_name}")
         self.layers = layers
         self.analysis_dict = {
-            "updated_at": datetime.now()
+            "updated_at": time.localtime()
         }
         self.processed_image = None
         VisionStack.static_id += 1
@@ -84,7 +84,7 @@ class VisionStack(Node):
     
     def run(self, in_image, verbose = False):
         processed_image = in_image.copy()
-        self.analysis_dict["updated_at"] = datetime.now()
+        self.analysis_dict["updated_at"] = time.localtime()
 
         num_rows = -(-len(self.layers) // NUM_COLS)
 

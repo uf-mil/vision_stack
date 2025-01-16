@@ -11,7 +11,7 @@
   <depend>sensor_msgs</depend>
   
   <depend>typing</depend>
-  <depend>datetime</depend>
+  <depend>time</depend>
   <depend>numpy</depend>
   <depend>cv_bridge</depend>
   <depend>cv2</depend>

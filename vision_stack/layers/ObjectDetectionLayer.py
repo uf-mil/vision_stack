@@ -23,8 +23,8 @@ from .helpers.ml_funcs import attempt_load, plot_one_box, non_max_suppression
 from .Layer import AnalysisLayer
 
 class ObjectDetectionLayer(AnalysisLayer):
-    def __init__(self, path_to_weights, conf_thres, iou_thres, class_names_array = [], colors_array = [], pass_post_processing_img = False) -> None:
-
+    def __init__(self, conf_thres, iou_thres, weights_file:str, absolute_path_to_weights = "../ml/weights/", class_names_array = [], colors_array = [], pass_post_processing_img = False) -> None:
+        path_to_weights = absolute_path_to_weights + weights_file
         # Find file for weights and extract name
         _, file_type = os.path.splitext(path_to_weights)
         self.weights_name = os.path.splitext(os.path.basename(path_to_weights))[0]

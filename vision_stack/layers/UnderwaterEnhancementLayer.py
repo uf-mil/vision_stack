@@ -5,7 +5,7 @@ import torch
 import numpy as np
 import torch.nn as nn
 from torchvision import transforms
-import datetime
+import time
 
 from .Layer import PreprocessLayer
 
@@ -32,7 +32,7 @@ class UnderWaterImageEnhancementLayer(PreprocessLayer):
         self.unloader = transforms.ToPILImage()
     
     def process(self, image):
-        starttime = datetime.datetime.now()
+        starttime = time.localtime()
         img = Image.fromarray(image)
         img = img.convert("RGB")
         inp = self.testtransform(img).unsqueeze(0)
@@ -42,7 +42,7 @@ class UnderWaterImageEnhancementLayer(PreprocessLayer):
         # Place result images in directory
         corrected = self.unloader(out.cpu().squeeze(0))
         print(type(corrected))
-        endtime = datetime.datetime.now()
+        endtime = time.localtime()
         print(endtime-starttime)
         img_array = np.array(corrected)
         return (img_array, None)
