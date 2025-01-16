@@ -1,6 +1,0 @@
-{
-    "include": ["src/vision_stack/*.py"],
-    "ignore": [],
-    "pythonVersion": "3.8",
-    "pythonPlatform": "Linux",
-}
