@@ -26,4 +26,10 @@ setup(
             'vision_stack = vision_stack.VisionStack:main'
         ],
     },
+    include_package_data=True,  # Ensure non-Python files are included
+    package_data={
+        'vision_stack': [
+            'ml/weights/*',
+        ],
+    },
 )
