@@ -1,3 +1,12 @@
+# NOTE: This code was taken from the following research paper:
+#   @misc{chen2021underwater,
+#   title={Underwater Image Enhancement based on Deep Learning and Image Formation Model}, 
+#   author={Xuelei Chen and Pin Zhang and Lingwei Quan and Chao Yi and Cunyue Lu},
+#   year={2021},
+#   eprint={2101.00991},
+#   archivePrefix={arXiv},
+#   primaryClass={eess.IV}
+
 import os
 import torch
 from PIL import Image

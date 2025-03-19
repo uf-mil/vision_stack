@@ -5,7 +5,7 @@ import math
 from .Layer import AnalysisLayer
 
 try:
-    from vision_stack.msg import Lines, HoughTransform
+    from mil_msgs.msg import Lines, HoughTransform
 except Exception as e:
     print(f"Could not import messages because:\n{e}")
 

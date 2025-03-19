@@ -1,9 +1,0 @@
-Layers:
-- RGB magnification Layers
-    - RED
-    - GREEN
-    - BLUE
-- Edge detection layers
-    - Canny
-    - Sobel
-    

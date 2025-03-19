@@ -1,9 +1,8 @@
-#!/usr/bin/env python
-
 import os
+import numpy as np
 
 try:
-    from vision_stack.msg import ObjectDetection, ObjectDetections
+    from mil_msgs.msg import ObjectDetection, ObjectDetections
 except Exception as e:
     print(f"Could not import rclpy or messages because:\n{e}")
 
@@ -13,8 +12,10 @@ from ultralytics import YOLO
 from .Layer import AnalysisLayer
 
 class ObjectDetectionLayer(AnalysisLayer):
-    def __init__(self, conf_thres, weights_file:str, absolute_path_to_weights_directory = "../ml/weights/", pass_post_detection_img = False) -> None:
-        self.path_to_weights = absolute_path_to_weights_directory + weights_file
+    def __init__(self, conf_thres, weights_file:str, absolute_path_to_weights_directory = "", pass_post_detection_img = False) -> None:
+        print(os.getcwd())
+        absolute_path_to_weights_directory = absolute_path_to_weights_directory if absolute_path_to_weights_directory != "" else os.path.join(os.getcwd(), "vision_stack", "yolo_weights")
+        self.path_to_weights = os.path.join(absolute_path_to_weights_directory, weights_file)
         # Find file for weights and extract name
         self.weights_name = os.path.splitext(os.path.basename(self.path_to_weights))[0] 
 
@@ -34,15 +35,15 @@ class ObjectDetectionLayer(AnalysisLayer):
         results = self.model.predict(img, conf=self.conf_thres)
         detections = results[0].boxes
 
-        unprocessed_image = img.copy()
+        unprocessed_image = image
         bbox_image = results[0].plot()
 
         object_detections = []
 
         if detections:
             for bbox in detections:
-                x, y, w, h = bbox.xywh
-                conf = bbox.conf
+                x, y, w, h = bbox.xywh.numpy()[0]
+                conf = bbox.conf.item()
                 class_index = bbox.cls.item()
                 class_name = self.labels[class_index]
                 object_detections.append(ObjectDetection(center_x=x, center_y=y, width=w, height=h, confidence=conf, class_index=class_index, class_name=class_name))
