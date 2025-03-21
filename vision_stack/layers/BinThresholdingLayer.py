@@ -14,7 +14,7 @@ class BinThresholdingLayer(PreprocessLayer):
         """
         if low < 0 or high > 255 or low > high:
             raise Exception(f"Threshold values are invalid:\nLow: {low}  High: {high}\nRequirements:\n- Low < High\n- Low > 0\n- High < 255")
-        super().__init__("binThresholdingLayer")
+        super().__init__("binThresholding")
         self.low = low
         self.high = high
 

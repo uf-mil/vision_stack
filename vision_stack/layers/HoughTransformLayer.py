@@ -11,7 +11,7 @@ except Exception as e:
 
 class HoughTransformLayer(AnalysisLayer): #TODO: Write a more detailed description for layer
 
-    def __init__(self, threshold, min_line_length, max_line_gap, pass_post_processing_img = False) -> None:
+    def __init__(self, threshold=100, min_line_length=0, max_line_gap=20, pass_post_processing_img = False) -> None:
         """
         Apply Hough Transform for line detection on the given image.
 
@@ -69,7 +69,7 @@ class HoughTransformLayer(AnalysisLayer): #TODO: Write a more detailed descripti
                     2,
                 )
         
-        self.msg = Lines(lines=lines_msgs)
+        self.msg = Lines(lines=lines_msgs) if len(lines_msgs) > 0 else None
 
         return (contour_image_bgr if self.pass_post_processing_img else image, [] if lines is None else lines)
     

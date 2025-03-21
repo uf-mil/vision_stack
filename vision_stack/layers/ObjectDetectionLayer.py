@@ -14,7 +14,7 @@ from .Layer import AnalysisLayer
 class ObjectDetectionLayer(AnalysisLayer):
     def __init__(self, conf_thres, weights_file:str, absolute_path_to_weights_directory = "", pass_post_detection_img = False) -> None:
         print(os.getcwd())
-        absolute_path_to_weights_directory = absolute_path_to_weights_directory if absolute_path_to_weights_directory != "" else os.path.join(os.getcwd(), "vision_stack", "yolo_weights")
+        absolute_path_to_weights_directory = absolute_path_to_weights_directory if absolute_path_to_weights_directory != "" else os.path.join(os.getcwd(), "vision_stack", "weights")
         self.path_to_weights = os.path.join(absolute_path_to_weights_directory, weights_file)
         # Find file for weights and extract name
         self.weights_name = os.path.splitext(os.path.basename(self.path_to_weights))[0] 
