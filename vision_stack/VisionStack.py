@@ -7,6 +7,7 @@ from cv_bridge import CvBridge, CvBridgeError
 from sensor_msgs.msg import Image
 
 try:
+    import rclpy
     from rclpy.publisher import Publisher
     from rclpy.node import Node
 except:
@@ -34,7 +35,7 @@ class Image_Publisher:
         self.bridge = CvBridge()
         self.encoding = encoding
         self.node:Node = node
-        self.im_pub:Publisher = node.create_publisher(Image, topic, queue_size=queue_size)
+        self.im_pub:Publisher = node.create_publisher(Image, topic, qos_profile=queue_size)
 
     def get_num_connections(self) -> int:
         return self.im_pub.get_subscription_count()
@@ -93,7 +94,7 @@ class VisionStack(Node):
         for i, layer in enumerate(self.layers):
             layer_process = layer.process(processed_image)
             processed_image = layer_process[0]
-            topic_name = f"~{self.instance_id if self.unique_name == '' else self.unique_name}/{layer.name}_{i}"
+            topic_name = f"~/{self.instance_id if self.unique_name == '' else self.unique_name}/{layer.name}_{i}"
 
             if layer_process[1] is not None:
                 self.analysis_dict[f"{layer.name}_{i}"] = layer_process[1]
@@ -108,7 +109,7 @@ class VisionStack(Node):
 
             if verbose: # Create a display showing how each layer processes the image before it
                 try:
-                    verbose_layer_pub = Image_Publisher(topic_name)
+                    verbose_layer_pub = Image_Publisher(topic_name, self)
                     verbose_layer_pub.publish(processed_image)
                     ros_is_running = True
                 except:

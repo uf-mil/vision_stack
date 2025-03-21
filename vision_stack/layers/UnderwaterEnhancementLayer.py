@@ -1,3 +1,12 @@
+# NOTE: This code was taken from the following research paper:
+#   @misc{chen2021underwater,
+#   title={Underwater Image Enhancement based on Deep Learning and Image Formation Model}, 
+#   author={Xuelei Chen and Pin Zhang and Lingwei Quan and Chao Yi and Cunyue Lu},
+#   year={2021},
+#   eprint={2101.00991},
+#   archivePrefix={arXiv},
+#   primaryClass={eess.IV}
+
 import os
 import torch
 from PIL import Image
@@ -5,11 +14,11 @@ import torch
 import numpy as np
 import torch.nn as nn
 from torchvision import transforms
-import time
+from datetime import datetime
 
 from .Layer import PreprocessLayer
 
-WEIGHTS_PATH = os.path.join(os.path.dirname(__file__), '../ml/weights/model_best_2842.pth.tar')
+WEIGHTS_PATH = os.path.join(os.getcwd(), "vision_stack", "weights", 'model_best_2842.pth.tar')
 
 class UnderWaterImageEnhancementLayer(PreprocessLayer):
     def __init__(self) -> None:
@@ -32,7 +41,7 @@ class UnderWaterImageEnhancementLayer(PreprocessLayer):
         self.unloader = transforms.ToPILImage()
     
     def process(self, image):
-        starttime = time.localtime()
+        starttime = datetime.now()
         img = Image.fromarray(image)
         img = img.convert("RGB")
         inp = self.testtransform(img).unsqueeze(0)
@@ -42,7 +51,7 @@ class UnderWaterImageEnhancementLayer(PreprocessLayer):
         # Place result images in directory
         corrected = self.unloader(out.cpu().squeeze(0))
         print(type(corrected))
-        endtime = time.localtime()
+        endtime = datetime.now()
         print(endtime-starttime)
         img_array = np.array(corrected)
         return (img_array, None)

@@ -9,7 +9,7 @@ class SobelLayer(PreprocessLayer):
         Passes a cv2.Sobel filter over the image.
 
         Parameters:
-            ksize: parameter to change the size of the Sobel kernel. A larger kernel size can capture larger gradients but may also result in more noise.
+            ksize: parameter to change the size of the Sobel kernel. The dimensions of the kernel size must be an odd int (e.g. 5) and not larger than 31. A larger kernel size can capture larger gradients but may also result in more noise.
         """
         super().__init__("sobel")
         self.ksize = ksize

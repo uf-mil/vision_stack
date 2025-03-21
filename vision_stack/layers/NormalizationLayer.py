@@ -11,7 +11,7 @@ class MinMaxNormalizationLayer(PreprocessLayer):
     def process(self, image):
         min_val = np.min(image)
         max_val = np.max(image)
-        normalized_image = (image - min_val) / (max_val - min_val)
+        normalized_image = (image - min_val) / (max_val - min_val) if max_val - min_val > 0 else image
         return (normalized_image, None)
     
 
@@ -20,12 +20,12 @@ class ZScoreNormalizationLayer(PreprocessLayer):
         """
         Normalizes the image by calculating the mean and standard deviation of the pixels in the image, then subtracting the mean from all pixel values and dividing by the standard deviation.
         """
-        super().__init__()
+        super().__init__("zScoreNorm")
     
     def process(self, image):
         mean = np.mean(image)
         std_dev = np.std(image)
-        normalized_image = (image - mean) / std_dev
+        normalized_image = (image - mean) / std_dev if std_dev > 0 else image
         return (normalized_image, None)
 
 class RobustScalingLayer(PreprocessLayer):
