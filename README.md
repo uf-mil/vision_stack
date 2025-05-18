@@ -43,6 +43,7 @@ vs = VisionStack(
                 UnderWaterImageEnhancementLayer(), # Uses a generative AI model to improve underwater images (good for murky waters).
                 # Include as many layers in any combination as you need
             ],
+            unique_name="some_name_here" # part of topic name
         )
 
 # Pass image through vision stack
@@ -58,7 +59,7 @@ img = img.convert('RGB')
 img_array = np.array(img)
 
 # Pass img_array through vision_stack
-vs.run(in_image = image_array, verbose = True)
+vs.run(in_image = img_array, verbose = True)
 # With verbose, if ros is running then topics will be created for each layer to visualize processing.
 ```
 
