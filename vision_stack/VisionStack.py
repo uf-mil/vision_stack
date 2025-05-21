@@ -31,7 +31,7 @@ class Image_Publisher:
             through the constructor.
     """
 
-    def __init__(self, topic: str, node:Node, encoding: str = "bgr8", queue_size: int = 1):
+    def __init__(self, topic: str, node:Node, encoding: str = "infer", queue_size: int = 1):
         self.bridge = CvBridge()
         self.encoding = encoding
         self.node:Node = node
@@ -151,7 +151,7 @@ class VisionStack(Node):
             if verbose: # Create a display showing how each layer processes the image before it
                 try:
                     # when debugging we expect different image encodings (maybe there's an RGB layer, then BW, etc.)
-                    verbose_layer_pub = Image_Publisher(topic_name, self, encoding="infer")
+                    verbose_layer_pub = Image_Publisher(topic_name, self)
                     verbose_layer_pub.publish(processed_image)
                     ros_is_running = True
                 except:
