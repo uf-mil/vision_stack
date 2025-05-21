@@ -10,7 +10,7 @@ class BinThresholdingLayer(PreprocessLayer):
 
         Parameters:
             low: lower threshold for binarization process. Must be between 0 and 255.
-            high: higher threshold of binarization process. Must be between 0 and 255 and greater than 255.
+            high: higher threshold of binarization process. Must be between 0 and 255 and greater than low.
         """
         if low < 0 or high > 255 or low > high:
             raise Exception(f"Threshold values are invalid:\nLow: {low}  High: {high}\nRequirements:\n- Low < High\n- Low > 0\n- High < 255")

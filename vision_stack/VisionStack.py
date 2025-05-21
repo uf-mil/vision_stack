@@ -31,7 +31,7 @@ class Image_Publisher:
             through the constructor.
     """
 
-    def __init__(self, topic: str, node:Node, encoding: str = "bgr8", queue_size: int = 1):
+    def __init__(self, topic: str, node:Node, encoding: str = "infer", queue_size: int = 1):
         self.bridge = CvBridge()
         self.encoding = encoding
         self.node:Node = node
@@ -40,13 +40,54 @@ class Image_Publisher:
     def get_num_connections(self) -> int:
         return self.im_pub.get_subscription_count()
 
+    
+    # used to infer the encoding of an image
+    # useful when publishing different image encodings from same Image_Publisher instance
+    @staticmethod
+    def guess_ros_encoding(img: np.ndarray) -> str:
+        """
+        Guess the appropriate ROS image encoding string based on a NumPy image array.
+
+        Parameters:
+            img (np.ndarray): The input image as a NumPy array.
+
+        Returns:
+            str: A string representing the ROS-compatible image encoding.
+        """
+        if not isinstance(img, np.ndarray):
+            raise TypeError("Input must be a NumPy array.")
+
+        if img.dtype != np.uint8:
+            raise ValueError(f"Unsupported dtype: {img.dtype}. Only uint8 (8-bit) is supported.")
+
+        shape = img.shape
+
+        # Grayscale image (H, W)
+        if len(shape) == 2:
+            return "mono8"
+
+        # Color image (H, W, C)
+        if len(shape) == 3:
+            channels = shape[2]
+            if channels == 1:
+                return "mono8"
+            elif channels == 3:
+                return "bgr8"  # Assuming OpenCV-style (BGR)
+            elif channels == 4:
+                return "bgra8"
+            else:
+                raise ValueError(f"Unsupported number of channels: {channels}")
+        
+        raise ValueError(f"Unsupported image shape: {shape}")
+
     def publish(self, cv_image: np.ndarray):
         """
         Publishes an OpenCV image mat to the ROS topic. :class:`CvBridgeError`
         exceptions are caught and logged.
         """
         try:
-            image_message = self.bridge.cv2_to_imgmsg(cv_image, self.encoding)
+            encoding = self.encoding if self.encoding != "infer" else Image_Publisher.guess_ros_encoding(cv_image)
+            image_message = self.bridge.cv2_to_imgmsg(cv_image, encoding)
             self.im_pub.publish(image_message)
         except CvBridgeError as e:
             # Intentionally absorb CvBridge Errors
@@ -109,6 +150,7 @@ class VisionStack(Node):
 
             if verbose: # Create a display showing how each layer processes the image before it
                 try:
+                    # when debugging we expect different image encodings (maybe there's an RGB layer, then BW, etc.)
                     verbose_layer_pub = Image_Publisher(topic_name, self)
                     verbose_layer_pub.publish(processed_image)
                     ros_is_running = True
