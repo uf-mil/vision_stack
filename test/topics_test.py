@@ -1,7 +1,8 @@
 import rclpy
 import pytest
-from PIL import Image
+
 import numpy as np
+from PIL import Image
 
 from vision_stack import VisionStack
 from vision_stack import BinThresholdingLayer, CannyLayer, ColorMagnificationLayer, CustomLayer, GaussianLayer, GrayscaleLayer, HoughTransformLayer, MinMaxNormalizationLayer, ZScoreNormalizationLayer, ObjectDetectionLayer, ResizeLayer, RGBMagnificationLayer, RGBtoBGRLayer, SobelLayer, UnderWaterImageEnhancementLayer 
@@ -29,6 +30,8 @@ def test_topic_creation():
         RGBtoBGRLayer(),
         SobelLayer(5)
     ], 'test')
+
+    print("Initialization is complete")
 
     img = np.array(Image.open('test/test.jpg'))
     vs.run(img, True)
@@ -62,4 +65,4 @@ def test_topic_creation():
     rclpy.shutdown()
 
 
-
+test_topic_creation()
