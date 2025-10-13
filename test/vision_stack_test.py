@@ -52,7 +52,7 @@ class ObjectDetectionTest(Node):
         print(f'Image: {msg.width}x{msg.height}, encoding: {msg.encoding}')
 
         # Create Image from array
-        # self.vs.run(msg, True)
+        self.vs.run(msg, True)
         # print(f"I heard: {msg.data}")
 
 
