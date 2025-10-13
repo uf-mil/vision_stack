@@ -3,6 +3,8 @@ from typing import List
 import time
 import numpy as np
 
+import copy
+
 from cv_bridge import CvBridge, CvBridgeError
 from sensor_msgs.msg import Image
 
@@ -10,6 +12,8 @@ try:
     import rclpy
     from rclpy.publisher import Publisher
     from rclpy.node import Node
+    import matplotlib.pyplot as plt
+    plt.switch_backend('TkAgg')
 except:
     import matplotlib.pyplot as plt
     plt.switch_backend('TkAgg')
@@ -32,6 +36,7 @@ class Image_Publisher:
     """
 
     def __init__(self, topic: str, node:Node, encoding: str = "infer", queue_size: int = 1):
+        print(f"Topic Name: {topic}")
         self.bridge = CvBridge()
         self.encoding = encoding
         self.node:Node = node
@@ -125,7 +130,7 @@ class VisionStack(Node):
         self.layers.pop(index)
     
     def run(self, in_image, verbose = False):
-        processed_image = in_image.copy()
+        processed_image = copy.copy(in_image)
         self.analysis_dict["updated_at"] = time.localtime()
 
         num_rows = -(-len(self.layers) // NUM_COLS)
@@ -135,7 +140,7 @@ class VisionStack(Node):
         for i, layer in enumerate(self.layers):
             layer_process = layer.process(processed_image)
             processed_image = layer_process[0]
-            topic_name = f"~/{self.instance_id if self.unique_name == '' else self.unique_name}/{layer.name}_{i}"
+            topic_name = f"/{self.instance_id if self.unique_name == '' else self.unique_name}/{layer.name}_{i}"
 
             if layer_process[1] is not None:
                 self.analysis_dict[f"{layer.name}_{i}"] = layer_process[1]
@@ -149,27 +154,30 @@ class VisionStack(Node):
                         print(f"Could not publish ros message:\n{e}")
 
             if verbose: # Create a display showing how each layer processes the image before it
-                try:
+                # try:
                     # when debugging we expect different image encodings (maybe there's an RGB layer, then BW, etc.)
-                    verbose_layer_pub = Image_Publisher(topic_name, self)
+                    print("Creating publisher")
+                    verbose_layer_pub = Image_Publisher("/front_cam/resize_0", self)
+                    print("Created publisher")
                     verbose_layer_pub.publish(processed_image)
+                    print("Publishing image")
                     ros_is_running = True
-                except:
-                    print("ROS is not running")
-                    fig, axes = plt.subplots(num_rows, NUM_COLS)
-                    row_index = i // NUM_COLS
-                    col_index = i % NUM_COLS
+                # except:
+                #     print("ROS is not running")
+                #     fig, axes = plt.subplots(num_rows, NUM_COLS)
+                #     row_index = i // NUM_COLS
+                #     col_index = i % NUM_COLS
 
-                    if num_rows == 1:
-                        axes[col_index].imshow(processed_image)
-                        axes[col_index].set_title(layer.name + "_" + i)
-                    else:
-                        axes[row_index, col_index].imshow(processed_image)
-                        axes[row_index, col_index].set_title(layer.name + "_" + i)                
-                    if num_rows == 1:
-                        axes[col_index].axis('off')
-                    else:
-                        axes[row_index, col_index].axis('off')
+                #     if num_rows == 1:
+                #         axes[col_index].imshow(processed_image)
+                #         axes[col_index].set_title(layer.name + "_" + str(i))
+                #     else:
+                #         axes[row_index, col_index].imshow(processed_image)
+                #         axes[row_index, col_index].set_title(layer.name + "_" + str(i))                
+                #     if num_rows == 1:
+                #         axes[col_index].axis('off')
+                #     else:
+                #         axes[row_index, col_index].axis('off')
             
         self.processed_image = processed_image
 
