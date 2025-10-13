@@ -5,6 +5,8 @@ from rclpy.node import Node
 from sensor_msgs.msg import Image
 from std_msgs.msg import String
 
+from cv_bridge import CvBridge
+
 import sys
 from pathlib import Path
 
@@ -19,6 +21,7 @@ sys.path.append(str(Path(__file__).parent.parent))
 
 from vision_stack import ResizeLayer, UnderWaterImageEnhancementLayer, VisionStack
 
+bridge = CvBridge()
 
 class ObjectDetectionTest(Node):
     def __init__(self):
@@ -49,10 +52,12 @@ class ObjectDetectionTest(Node):
 
     def listener_callback(self, msg):
         # print("Was called")
-        print(f'Image: {msg.width}x{msg.height}, encoding: {msg.encoding}')
+        # print(f'Image: {msg.width}x{msg.height}, encoding: {msg.encoding}')
 
+        cv_image = bridge.imgmsg_to_cv2(msg, desired_encoding='passthrough')
+        # print(type(cv_image), cv_image.shape)
         # Create Image from array
-        self.vs.run(msg, True)
+        self.vs.run(cv_image, True)
         # print(f"I heard: {msg.data}")
 
 
