@@ -27,7 +27,6 @@ from detectron2.data import MetadataCatalog
 class Detectron2Tester:
     """Class to test and benchmark different Detectron2 models."""
     
-    # Available pre-trained models
     AVAILABLE_MODELS = {
         'faster_rcnn_R_50_FPN': 'COCO-Detection/faster_rcnn_R_50_FPN_3x.yaml',
         'faster_rcnn_R_101_FPN': 'COCO-Detection/faster_rcnn_R_101_FPN_3x.yaml',
@@ -49,13 +48,11 @@ class Detectron2Tester:
         self.model_name = model_name
         self.conf_threshold = conf_threshold
         
-        # Check if GPU is available
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
         print(f"Using device: {self.device}")
         if self.device == 'cuda':
             print(f"GPU: {torch.cuda.get_device_name(0)}")
         
-        # Setup model configuration
         self.cfg = self._setup_config(model_name, conf_threshold)
         self.predictor = DefaultPredictor(self.cfg)
         self.metadata = MetadataCatalog.get(
@@ -147,12 +144,12 @@ class Detectron2Tester:
             Visualized image (BGR)
         """
         v = Visualizer(
-            image[:, :, ::-1],  # Convert BGR to RGB
+            image[:, :, ::-1],  
             self.metadata,
             scale=1.0
         )
         vis_output = v.draw_instance_predictions(outputs["instances"].to("cpu"))
-        return vis_output.get_image()[:, :, ::-1]  # Convert back to BGR
+        return vis_output.get_image()[:, :, ::-1] 
     
     def test_single_image(self, image_path, save_output=True):
         """Test on a single image."""
@@ -160,18 +157,15 @@ class Detectron2Tester:
         print(f"Testing on image: {image_path}")
         print(f"{'='*60}")
         
-        # Load image
         image = cv2.imread(str(image_path))
         if image is None:
             raise ValueError(f"Could not load image: {image_path}")
         
         print(f"Image size: {image.shape[1]}x{image.shape[0]}")
         
-        # Run prediction
         outputs, inference_time = self.predict_image(image)
         detections = self.extract_detections(outputs)
         
-        # Print results
         print(f"\nInference time: {inference_time*1000:.2f} ms")
         print(f"FPS: {1/inference_time:.2f}")
         print(f"Detections found: {len(detections)}")
@@ -184,16 +178,13 @@ class Detectron2Tester:
                       f"bbox: ({det['bbox'][0]:.0f}, {det['bbox'][1]:.0f}, "
                       f"{det['bbox'][2]:.0f}, {det['bbox'][3]:.0f})")
         
-        # Visualize
         vis_image = self.visualize_predictions(image, outputs)
         
-        # Display
         cv2.imshow('Detectron2 Predictions', vis_image)
         print("\nPress any key to continue...")
         cv2.waitKey(0)
         cv2.destroyAllWindows()
         
-        # Save output
         if save_output:
             output_dir = Path('output')
             output_dir.mkdir(exist_ok=True)
@@ -222,27 +213,22 @@ class Detectron2Tester:
             if not ret:
                 break
             
-            # Run prediction
             outputs, inference_time = self.predict_image(frame)
             detections = self.extract_detections(outputs)
             
-            # Calculate FPS
             fps = 1.0 / inference_time
             fps_history.append(fps)
             if len(fps_history) > 30:
                 fps_history.pop(0)
             avg_fps = np.mean(fps_history)
             
-            # Visualize
             vis_frame = self.visualize_predictions(frame, outputs)
             
-            # Add FPS text
             cv2.putText(vis_frame, f"FPS: {avg_fps:.1f}", (10, 30),
                        cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
             cv2.putText(vis_frame, f"Detections: {len(detections)}", (10, 70),
                        cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
             
-            # Display
             cv2.imshow('Detectron2 Webcam', vis_frame)
             
             if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -263,7 +249,6 @@ class Detectron2Tester:
         if not cap.isOpened():
             raise ValueError(f"Could not open video: {video_path}")
         
-        # Get video properties
         fps = int(cap.get(cv2.CAP_PROP_FPS))
         width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
         height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
@@ -271,7 +256,6 @@ class Detectron2Tester:
         
         print(f"Video: {width}x{height} @ {fps} FPS, {total_frames} frames")
         
-        # Setup video writer if saving
         if save_output:
             output_dir = Path('output')
             output_dir.mkdir(exist_ok=True)
@@ -289,15 +273,12 @@ class Detectron2Tester:
             
             frame_count += 1
             
-            # Run prediction
             outputs, inference_time = self.predict_image(frame)
             detections = self.extract_detections(outputs)
             inference_times.append(inference_time)
             
-            # Visualize
             vis_frame = self.visualize_predictions(frame, outputs)
             
-            # Add stats
             avg_inference = np.mean(inference_times[-30:])
             cv2.putText(vis_frame, 
                        f"Frame: {frame_count}/{total_frames}", 
@@ -312,10 +293,8 @@ class Detectron2Tester:
                        (10, 90),
                        cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
             
-            # Display
             cv2.imshow('Detectron2 Video', vis_frame)
             
-            # Save
             if save_output:
                 out.write(vis_frame)
             
@@ -328,7 +307,6 @@ class Detectron2Tester:
             print(f"\nSaved output to: {output_path}")
         cv2.destroyAllWindows()
         
-        # Print summary
         print(f"\n{'='*60}")
         print("Summary:")
         print(f"  Frames processed: {frame_count}")
@@ -361,7 +339,6 @@ def benchmark_models(image_path, models_to_test=None, num_runs=10):
     print(f"Runs per model: {num_runs}")
     print(f"{'='*60}\n")
     
-    # Load image once
     image = cv2.imread(str(image_path))
     if image is None:
         raise ValueError(f"Could not load image: {image_path}")
@@ -374,10 +351,8 @@ def benchmark_models(image_path, models_to_test=None, num_runs=10):
         try:
             tester = Detectron2Tester(model_name=model_name)
             
-            # Warm-up run
             tester.predict_image(image)
             
-            # Benchmark runs
             times = []
             detection_counts = []
             
@@ -402,7 +377,6 @@ def benchmark_models(image_path, models_to_test=None, num_runs=10):
             print(f"Error testing {model_name}: {e}")
             continue
     
-    # Print comparison table
     print(f"\n{'='*80}")
     print("BENCHMARK RESULTS")
     print(f"{'='*80}")
@@ -440,14 +414,12 @@ def main():
     
     args = parser.parse_args()
     
-    # List models
     if args.list_models:
         print("\nAvailable models:")
         for model in Detectron2Tester.AVAILABLE_MODELS.keys():
             print(f"  - {model}")
         return
     
-    # Benchmark mode
     if args.benchmark:
         if not args.image:
             print("Error: --benchmark requires --image")
@@ -455,13 +427,11 @@ def main():
         benchmark_models(args.image)
         return
     
-    # Create tester
     tester = Detectron2Tester(
         model_name=args.model,
         conf_threshold=args.conf_threshold
     )
     
-    # Run appropriate test
     if args.webcam:
         tester.test_webcam()
     elif args.video:

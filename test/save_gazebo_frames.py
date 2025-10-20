@@ -51,15 +51,12 @@ class FrameSaver(Node):
             return
         
         try:
-            # Convert ROS Image message to OpenCV image
-            # Try 'bgr8' first (most common), fall back to 'rgb8'
             try:
                 cv_image = self.bridge.imgmsg_to_cv2(msg, desired_encoding='bgr8')
             except:
                 cv_image = self.bridge.imgmsg_to_cv2(msg, desired_encoding='rgb8')
                 cv_image = cv2.cvtColor(cv_image, cv2.COLOR_RGB2BGR)
             
-            # Save frame
             self.frames_saved += 1
             filename = self.output_dir / f'frame_{self.frames_saved:04d}.jpg'
             cv2.imwrite(str(filename), cv_image)
