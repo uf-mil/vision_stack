@@ -14,6 +14,7 @@ from .layers.ColorMagnificationLayer import ColorMagnificationLayer
 from .layers.RGBtoBGRLayer import RGBtoBGRLayer
 from .layers.SobelLayer import SobelLayer
 from .layers.UnderwaterEnhancementLayer import UnderWaterImageEnhancementLayer
+from .layers.DarknetLayer import DarknetLayer
 
 __all__ = [
     'VisionStack',
