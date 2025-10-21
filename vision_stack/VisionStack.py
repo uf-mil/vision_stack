@@ -157,7 +157,7 @@ class VisionStack(Node):
                 # try:
                     # when debugging we expect different image encodings (maybe there's an RGB layer, then BW, etc.)
                     print("Creating publisher")
-                    verbose_layer_pub = Image_Publisher("/front_cam/resize_0", self)
+                    verbose_layer_pub = Image_Publisher(f"/front_cam/layer_{i}", self)
                     print("Created publisher")
                     verbose_layer_pub.publish(processed_image)
                     print("Publishing image")
@@ -179,6 +179,9 @@ class VisionStack(Node):
                 #     else:
                 #         axes[row_index, col_index].axis('off')
             
+            else:
+                print("Not creating publisher")
+
         self.processed_image = processed_image
 
         if verbose and not ros_is_running:

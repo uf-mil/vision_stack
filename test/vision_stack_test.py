@@ -46,9 +46,9 @@ class ObjectDetectionTest(Node):
                 MinMaxNormalizationLayer(),
                 ZScoreNormalizationLayer(),
                 RobustScalingLayer(),
-                ObjectDetectionLayer('path/to/weights.pt|tflite', conf_thres=0.5, iou_thres=0.5, class_names_array=['cls1','cls2','cls3',...], colors_array=[(255,0,0),(0,255,0),(0,0,255),...], pass_post_processing_img = False), # Access YOLO weights and make predictions on the image provided by the previous layer. Setting pass_post_processing_img will push the image with bounding boxes to the next layer.
+                # ObjectDetectionLayer(conf_thres=0.5, weights_file='path/to/weights.pt|tflite', iou_thres=0.5, class_names_array=['cls1','cls2','cls3',...], colors_array=[(255,0,0),(0,255,0),(0,0,255),...], pass_post_processing_img = False), # Access YOLO weights and make predictions on the image provided by the previous layer. Setting pass_post_processing_img will push the image with bounding boxes to the next layer.
                 ResizeLayer(960, 608), # Resize the image from the previous layer.
-                RGBMagnificationLayer('R'|'G'|'B'), # Magnifies the provided channel respectively.
+                RGBMagnificationLayer('G'), # Magnifies the provided channel respectively.
                 SobelLayer((5,5)), # Passes a sobel edge detection layer with a kernal size of (5,5) over the image.
                 UnderWaterImageEnhancementLayer(), # Uses a generative AI model to improve underwater images (good for murky waters).
                 # Include as many layers in any combination as you need
@@ -64,8 +64,8 @@ class ObjectDetectionTest(Node):
 
 
     def listener_callback(self, msg):
-        # print("Was called")
-        # print(f'Image: {msg.width}x{msg.height}, encoding: {msg.encoding}')
+        print("Was called")
+        print(f'Image: {msg.width}x{msg.height}, encoding: {msg.encoding}')
 
         cv_image = bridge.imgmsg_to_cv2(msg, desired_encoding='passthrough')
         # print(type(cv_image), cv_image.shape)
