@@ -154,7 +154,7 @@ class VisionStack(Node):
             if verbose: # Create a display showing how each layer processes the image before it
                 # try:
                     # when debugging we expect different image encodings (maybe there's an RGB layer, then BW, etc.)
-                    verbose_layer_pub = Image_Publisher(f"/front_cam/layer_{i}", self)
+                    verbose_layer_pub = Image_Publisher(f"/front_cam/{layer.__class__.__name__}", self)
                     verbose_layer_pub.publish(processed_image)
                     ros_is_running = True
                 # except:
