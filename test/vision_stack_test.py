@@ -11,6 +11,7 @@ import sys
 from pathlib import Path
 
 sys.path.append(str(Path(__file__).parent.parent))
+vision_stack_base_path = str(Path(__file__).parent.parent)
 
 from vision_stack import VisionStack, BinThresholdingLayer, CannyLayer, ColorMagnificationLayer, CustomLayer, GaussianLayer, GrayscaleLayer, HoughTransformLayer, MinMaxNormalizationLayer, ZScoreNormalizationLayer, RobustScalingLayer, ObjectDetectionLayer, ResizeLayer, RGBMagnificationLayer, SobelLayer, UnderWaterImageEnhancementLayer
 
@@ -31,6 +32,10 @@ class ObjectDetectionTest(Node):
             layers=[
                 # Include as many layers in any combination as you need
             
+
+                # Stole the comments and layer initializations below from Daniel's README on the VisionStack repo
+
+                ObjectDetectionLayer(conf_thres=0.5, weights_file=f"{vision_stack_base_path}/vision_stack/weights/test.pt", pass_post_detection_img = False), # Access YOLO weights and make predictions on the image provided by the previous layer. Setting pass_post_processing_img will push the image with bounding boxes to the next layer.
                 BinThresholdingLayer(150,250), # Converts image to grayscale if image is not grayscale and extracts pixels with values between 150 and 250.
                 CannyLayer(50,100), # Simplified canny filter that uses cv2.Canny to pass a canny filter over an image with the low value (50) threshold for soft edge detection and the high value (100) for strong edges detection.
                 ColorMagnificationLayer((23,156,234)), # Highlights objects with this color (23,156,234) in an image.
@@ -40,9 +45,8 @@ class ObjectDetectionTest(Node):
                 MinMaxNormalizationLayer(),
                 ZScoreNormalizationLayer(),
                 ResizeLayer(960, 608), # Resize the image from the previous layer.
-                RGBMagnificationLayer('G'), # Magnifies the provided channel respectively.
+                RGBMagnificationLayer('G'), # Magnifies the provided channel respectively (options are 'R', 'G', 'B')
                 UnderWaterImageEnhancementLayer(), # Uses a generative AI model to improve underwater images (good for murky waters).
-                # ObjectDetectionLayer(conf_thres=0.5, weights_file='path/to/weights.pt|tflite', iou_thres=0.5, class_names_array=['cls1','cls2','cls3',...], colors_array=[(255,0,0),(0,255,0),(0,0,255),...], pass_post_processing_img = False), # Access YOLO weights and make predictions on the image provided by the previous layer. Setting pass_post_processing_img will push the image with bounding boxes to the next layer.
                 
             
 
