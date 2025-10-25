@@ -152,27 +152,27 @@ class VisionStack(Node):
                         print(f"Could not publish ros message:\n{e}")
 
             if verbose: # Create a display showing how each layer processes the image before it
-                # try:
+                try:
                     # when debugging we expect different image encodings (maybe there's an RGB layer, then BW, etc.)
                     verbose_layer_pub = Image_Publisher(f"/front_cam/{layer.__class__.__name__}", self)
                     verbose_layer_pub.publish(processed_image)
                     ros_is_running = True
-                # except:
-                #     print("ROS is not running")
-                #     fig, axes = plt.subplots(num_rows, NUM_COLS)
-                #     row_index = i // NUM_COLS
-                #     col_index = i % NUM_COLS
+                except:
+                    print("ROS is not running")
+                    fig, axes = plt.subplots(num_rows, NUM_COLS)
+                    row_index = i // NUM_COLS
+                    col_index = i % NUM_COLS
 
-                #     if num_rows == 1:
-                #         axes[col_index].imshow(processed_image)
-                #         axes[col_index].set_title(layer.name + "_" + str(i))
-                #     else:
-                #         axes[row_index, col_index].imshow(processed_image)
-                #         axes[row_index, col_index].set_title(layer.name + "_" + str(i))                
-                #     if num_rows == 1:
-                #         axes[col_index].axis('off')
-                #     else:
-                #         axes[row_index, col_index].axis('off')
+                    if num_rows == 1:
+                        axes[col_index].imshow(processed_image)
+                        axes[col_index].set_title(layer.name + "_" + str(i))
+                    else:
+                        axes[row_index, col_index].imshow(processed_image)
+                        axes[row_index, col_index].set_title(layer.name + "_" + str(i))                
+                    if num_rows == 1:
+                        axes[col_index].axis('off')
+                    else:
+                        axes[row_index, col_index].axis('off')
             
             else:
                 print("Not creating publisher")
