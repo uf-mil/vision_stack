@@ -15,8 +15,6 @@ try:
     import matplotlib.pyplot as plt
     plt.switch_backend('TkAgg')
 except:
-    import matplotlib.pyplot as plt
-    plt.switch_backend('TkAgg')
     print("mil_ros_tools package is not available")
 
 NUM_COLS = 3
@@ -156,11 +154,8 @@ class VisionStack(Node):
             if verbose: # Create a display showing how each layer processes the image before it
                 # try:
                     # when debugging we expect different image encodings (maybe there's an RGB layer, then BW, etc.)
-                    print("Creating publisher")
                     verbose_layer_pub = Image_Publisher(f"/front_cam/layer_{i}", self)
-                    print("Created publisher")
                     verbose_layer_pub.publish(processed_image)
-                    print("Publishing image")
                     ros_is_running = True
                 # except:
                 #     print("ROS is not running")
