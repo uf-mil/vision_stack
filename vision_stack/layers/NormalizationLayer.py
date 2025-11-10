@@ -33,7 +33,7 @@ class RobustScalingLayer(PreprocessLayer):
         """
         Normalizes the image by calculating the median and the IQR of all the pixels, then subtracting the median form the pixels and dividing by the IQR.
         """
-        super().__init__()
+        super().__init__("RobustScalingLayer")
     
     def process(self, image):
         median = np.median(image)
