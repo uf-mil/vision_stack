@@ -3,8 +3,6 @@ from typing import List
 import time
 import numpy as np
 
-import copy
-
 from cv_bridge import CvBridge, CvBridgeError
 from sensor_msgs.msg import Image
 
@@ -128,7 +126,7 @@ class VisionStack(Node):
         self.layers.pop(index)
     
     def run(self, in_image, verbose = False):
-        processed_image = copy.copy(in_image)
+        processed_image = in_image.copy()
         self.analysis_dict["updated_at"] = time.localtime()
 
         num_rows = -(-len(self.layers) // NUM_COLS)
@@ -154,7 +152,7 @@ class VisionStack(Node):
             if verbose: # Create a display showing how each layer processes the image before it
                 try:
                     # when debugging we expect different image encodings (maybe there's an RGB layer, then BW, etc.)
-                    verbose_layer_pub = Image_Publisher(f"/front_cam/{layer.__class__.__name__}", self)
+                    verbose_layer_pub = Image_Publisher(f"{layer.__class__.__name__}", self)
                     verbose_layer_pub.publish(processed_image)
                     ros_is_running = True
                 except:
@@ -173,9 +171,6 @@ class VisionStack(Node):
                         axes[col_index].axis('off')
                     else:
                         axes[row_index, col_index].axis('off')
-            
-            else:
-                print("Not creating publisher")
 
         self.processed_image = processed_image
 

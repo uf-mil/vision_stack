@@ -9,7 +9,6 @@
 
 import os
 import torch
-from pathlib import Path
 from PIL import Image
 import torch
 import numpy as np
@@ -19,7 +18,7 @@ from datetime import datetime
 
 from .Layer import PreprocessLayer
 
-WEIGHTS_PATH = Path(os.path.abspath(__file__)).parent.parent / "weights" / "model_best_2842.pth.tar"
+WEIGHTS_PATH = os.path.join(os.getcwd(), "vision_stack", "weights", 'model_best_2842.pth.tar')
 
 class UnderWaterImageEnhancementLayer(PreprocessLayer):
     def __init__(self) -> None:
