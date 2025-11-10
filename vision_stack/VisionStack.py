@@ -10,9 +10,9 @@ try:
     import rclpy
     from rclpy.publisher import Publisher
     from rclpy.node import Node
-except:
     import matplotlib.pyplot as plt
     plt.switch_backend('TkAgg')
+except:
     print("mil_ros_tools package is not available")
 
 NUM_COLS = 3
@@ -32,6 +32,7 @@ class Image_Publisher:
     """
 
     def __init__(self, topic: str, node:Node, encoding: str = "infer", queue_size: int = 1):
+        print(f"Topic Name: {topic}")
         self.bridge = CvBridge()
         self.encoding = encoding
         self.node:Node = node
@@ -135,7 +136,7 @@ class VisionStack(Node):
         for i, layer in enumerate(self.layers):
             layer_process = layer.process(processed_image)
             processed_image = layer_process[0]
-            topic_name = f"~/{self.instance_id if self.unique_name == '' else self.unique_name}/{layer.name}_{i}"
+            topic_name = f"/{self.instance_id if self.unique_name == '' else self.unique_name}/{layer.name}_{i}"
 
             if layer_process[1] is not None:
                 self.analysis_dict[f"{layer.name}_{i}"] = layer_process[1]
@@ -151,7 +152,7 @@ class VisionStack(Node):
             if verbose: # Create a display showing how each layer processes the image before it
                 try:
                     # when debugging we expect different image encodings (maybe there's an RGB layer, then BW, etc.)
-                    verbose_layer_pub = Image_Publisher(topic_name, self)
+                    verbose_layer_pub = Image_Publisher(f"{layer.__class__.__name__}", self)
                     verbose_layer_pub.publish(processed_image)
                     ros_is_running = True
                 except:
@@ -162,15 +163,15 @@ class VisionStack(Node):
 
                     if num_rows == 1:
                         axes[col_index].imshow(processed_image)
-                        axes[col_index].set_title(layer.name + "_" + i)
+                        axes[col_index].set_title(layer.name + "_" + str(i))
                     else:
                         axes[row_index, col_index].imshow(processed_image)
-                        axes[row_index, col_index].set_title(layer.name + "_" + i)                
+                        axes[row_index, col_index].set_title(layer.name + "_" + str(i))                
                     if num_rows == 1:
                         axes[col_index].axis('off')
                     else:
                         axes[row_index, col_index].axis('off')
-            
+
         self.processed_image = processed_image
 
         if verbose and not ros_is_running:
